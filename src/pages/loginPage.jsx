@@ -1,12 +1,14 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { ROUTES } from "../constants/routes";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -21,12 +23,14 @@ export default function LoginPage() {
       return;
     }
     setError("");
+    setIsLoading(true);
     try {
       await login({ username, password });
-      navigate("/dashboard");
+      navigate(ROUTES.DASHBOARD);
     } catch (err) {
       setError(err.message);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -71,16 +75,17 @@ export default function LoginPage() {
             {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
           </div>
           <div className="flex items-center justify-between text-sm">
-            <a href="#" className="text-purple-600 hover:text-purple-500 ml-auto">
+            <Link to={ROUTES.FORGOT_PASSWORD} className="text-purple-600 hover:text-purple-500 ml-auto">
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition duration-300"
+              disabled={isLoading}
+              className="w-full flex justify-center bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition duration-300 disabled:opacity-50"
             >
-              Ingresar
+              {isLoading ? "Cargando..." : "Ingresar"}
             </button>
           </div>
         </form>
