@@ -1,8 +1,8 @@
 // src/pages/ResetPassword.jsx
 import { useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import { resetPassword } from "../api/auth";
-import { ROUTES } from "../constants/routes";
+import { resetPassword } from "../../api/auth";
+import { ROUTES } from "../../constants/routes";
 
 export default function ResetPasswordPage() {
   const [searchParams] = useSearchParams();

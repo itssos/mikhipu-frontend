@@ -1,8 +1,8 @@
 // src/pages/ForgotPassword.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { forgotPassword } from "../api/auth";
-import { ROUTES } from "../constants/routes";
+import { forgotPassword } from "../../api/auth";
+import { ROUTES } from "../../constants/routes";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

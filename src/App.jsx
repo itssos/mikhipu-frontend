@@ -2,13 +2,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import LoginPage from './pages/LoginPage';
+import PrivateRoute from './routes/PrivateRoute';
+
 import Dashboard from './pages/Dashboard';
 import AdminPage from './pages/AdminPage';
-import NotAuthorized from './pages/NotAuthorized';
-import PrivateRoute from './routes/PrivateRoute';
-import ForgotPasswordPage from './pages/ForgotPassword';
-import ResetPasswordPage from './pages/ResetPassword';
+import NotAuthorized from './pages/error/NotAuthorized';
+import LoginPage from './pages/auth/LoginPage';
+import ForgotPasswordPage from './pages/auth/ForgotPassword';
+import ResetPasswordPage from './pages/auth/ResetPassword';
+import NotFound from './pages/error/NotFound';
 
 function App() {
   return (
@@ -35,7 +37,7 @@ function App() {
             }
           />
           <Route path="/not-authorized" element={<NotAuthorized />} />
-          <Route path="*" element={<LoginPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AuthProvider>

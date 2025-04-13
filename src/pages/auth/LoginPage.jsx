@@ -1,8 +1,8 @@
-
+// src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import { ROUTES } from "../constants/routes";
+import useAuth from "../../hooks/useAuth";
+import { ROUTES } from "../../constants/routes";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -47,8 +47,8 @@ export default function LoginPage() {
       {/* Capa de color semitransparente */}
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-200 via-fuchsia-100 to-yellow-100 opacity-55 z-0"></div>
 
-      {/* Caja de login */}
-      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-96 border border-gray-200">
+      {/* Caja de login responsive */}
+      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-full max-w-md mx-4 border border-gray-200">
         <div className="mb-6 text-center">
           <h2 className="text-xl font-bold text-purple-800">Bienvenido a MiKhipu🎒</h2>
           <h3 className="font-semibold text-gray-700 mt-1">Inicie Sesión</h3>
@@ -70,7 +70,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-sm text-gray-600 px-4 py-3 rounded-lg w-full bg-gray-100 focus:bg-white border border-gray-300 focus:outline-none focus:border-purple-400"
+              className="w-full text-sm text-gray-600 px-4 py-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:outline-none focus:border-purple-400"
             />
             {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
           </div>
