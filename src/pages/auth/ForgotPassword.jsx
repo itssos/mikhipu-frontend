@@ -1,4 +1,4 @@
-// src/pages/ForgotPassword.jsx
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { forgotPassword } from "../../api/auth";
@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
     try {
       const response = await forgotPassword(email);
-      setInfo(response); // Mostrar el mensaje de confirmación (ej. "Correo enviado...")
+      setInfo(response);
     } catch (err) {
       setError(err.message);
     }
@@ -42,8 +42,7 @@ export default function ForgotPasswordPage() {
       {/* Capa de color semitransparente */}
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-200 via-fuchsia-100 to-yellow-100 opacity-55 z-0"></div>
       
-      {/* Caja de formulario */}
-      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-96 border border-gray-200">
+      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-full max-w-md mx-4 border border-gray-200">
         <div className="mb-6 text-center">
           <h2 className="text-xl font-bold text-purple-800">Olvidaste tu Contraseña</h2>
           <h3 className="font-semibold text-gray-700 mt-1">Recupera tu acceso</h3>

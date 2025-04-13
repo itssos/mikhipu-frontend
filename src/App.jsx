@@ -11,6 +11,7 @@ import LoginPage from './pages/auth/LoginPage';
 import ForgotPasswordPage from './pages/auth/ForgotPassword';
 import ResetPasswordPage from './pages/auth/ResetPassword';
 import NotFound from './pages/error/NotFound';
+import Layout from './components/Layout';
 
 function App() {
   return (
@@ -24,7 +25,9 @@ function App() {
             path="/dashboard"
             element={
               <PrivateRoute allowedRoles={['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO']}>
-                <Dashboard />
+                <Layout>
+                  <Dashboard />
+                </Layout>
               </PrivateRoute>
             }
           />

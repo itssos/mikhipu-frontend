@@ -45,7 +45,7 @@ export default function ResetPasswordPage() {
       setModalMessage(response);
       setShowModal(true);
       setError("");
-      // Después de mostrar el modal se redirige al login
+      // Después de mostrar el modal, redirigir al login en 3 segundos
       setTimeout(() => {
         setShowModal(false);
         navigate(ROUTES.LOGIN);
@@ -67,11 +67,11 @@ export default function ResetPasswordPage() {
         backgroundColor: "#e5dff7"
       }}
     >
-      {/* Capa de color semitransparente */}
+      {/* Capa semitransparente */}
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-200 via-fuchsia-100 to-yellow-100 opacity-55 z-0"></div>
       
-      {/* Caja de formulario */}
-      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-96 border border-gray-200">
+      {/* Caja de formulario responsive */}
+      <div className="relative z-10 p-8 bg-white bg-opacity-95 rounded-3xl shadow-2xl w-full max-w-md mx-4 border border-gray-200">
         <div className="mb-6 text-center">
           <h2 className="text-xl font-bold text-purple-800">Restablecer Contraseña</h2>
           <h3 className="font-semibold text-gray-700 mt-1">Ingresa tu nueva contraseña</h3>
@@ -115,10 +115,10 @@ export default function ResetPasswordPage() {
         </form>
       </div>
 
-      {/* Modal de Éxito */}
+      {/* Modal de éxito */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-sm w-full text-center">
+          <div className="bg-white rounded-xl shadow-lg p-8 max-w-sm w-full mx-4 text-center">
             <h2 className="text-xl font-bold text-purple-800 mb-4">Éxito</h2>
             <p className="text-gray-700 mb-4">{modalMessage}</p>
             <p className="text-sm text-gray-500">Serás redirigido al inicio de sesión...</p>
