@@ -1,15 +1,10 @@
-// src/pages/PersonManagement.jsx
+// Dentro de PersonManagement.jsx (vista completa, se incluye la parte relevante)
 import React, { useEffect, useState } from "react";
 import { getPersons, createPerson, updatePerson, deletePerson } from "../api/person";
 import { assignRoleToUser } from "../api/user";
+import ExcelUploadModal from "../components/ExcelUploadModal";
 
-const ROLE_OPTIONS = [
-  // "DOCENTE", 
-  "ESTUDIANTE",
-  // "APODERADO"
-];
-
-// Para creación, no se pide "type" ya que se usará el rol seleccionado.
+const ROLE_OPTIONS = ["ADMINISTRADOR", "DOCENTE", "ESTUDIANTE", "APODERADO"];
 const initialForm = {
   firstName: "",
   lastName: "",
@@ -41,8 +36,8 @@ export default function PersonManagement() {
   const [deleteId, setDeleteId] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createForm, setCreateForm] = useState(initialForm);
+  const [showExcelModal, setShowExcelModal] = useState(false);
 
-  // Cargar la lista de personas
   const fetchPersons = async () => {
     setLoading(true);
     setGlobalError("");
@@ -66,7 +61,6 @@ export default function PersonManagement() {
 
   // --- Modal de Edición ---
   const openEditModal = (person) => {
-    // Prepara el formulario para edición; se usa el rol actual del usuario como "role"
     setEditForm({
       id: person.id,
       firstName: person.firstName || "",
@@ -81,7 +75,7 @@ export default function PersonManagement() {
       schoolLevel: person.schoolLevel || "",
       username: person.user?.username || "",
       email: person.user?.email || "",
-      password: "", // Se deja vacía para no cambiar a menos que se modifique
+      password: "",
       role: (person.user?.roles && person.user.roles[0]) || "",
     });
     setShowEditModal(true);
@@ -96,8 +90,6 @@ export default function PersonManagement() {
     setActionLoading(true);
     setGlobalError("");
     try {
-      // Preparar el objeto a enviar.
-      // Se asigna type igual al rol seleccionado (ya que "tipo" de Person se usa para el rol).
       const updatedData = {
         type: editForm.role,
         firstName: editForm.firstName,
@@ -113,7 +105,6 @@ export default function PersonManagement() {
         user: {
           username: editForm.username,
           email: editForm.email,
-          // Solo enviar password si se cambia.
           ...(editForm.password && { password: editForm.password }),
           roles: [editForm.role],
         },
@@ -158,7 +149,6 @@ export default function PersonManagement() {
   };
 
   const handleSaveCreate = async () => {
-    // Validación básica
     if (
       !createForm.firstName ||
       !createForm.lastName ||
@@ -174,7 +164,6 @@ export default function PersonManagement() {
     setGlobalError("");
     try {
       const newPersonData = {
-        // Se asigna "type" igual al rol seleccionado.
         type: createForm.role,
         firstName: createForm.firstName,
         lastName: createForm.lastName,
@@ -209,12 +198,18 @@ export default function PersonManagement() {
       <h1 className="text-2xl font-bold mb-6 text-center">Administración de Personas</h1>
       {globalError && <div className="text-red-500 mb-4 text-center">{globalError}</div>}
       {actionMessage && <div className="text-green-500 mb-4 text-center">{actionMessage}</div>}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-4 space-x-2">
         <button
           onClick={openCreateModal}
           className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
         >
           Nueva Persona
+        </button>
+        <button
+          onClick={() => setShowExcelModal(true)}
+          className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded"
+        >
+          Importar Excel
         </button>
       </div>
       {loading ? (
@@ -234,9 +229,9 @@ export default function PersonManagement() {
                 <th className="py-2 px-4 border-b">Usuario</th>
                 <th className="py-2 px-4 border-b">Email</th>
                 <th className="py-2 px-4 border-b">Rol</th>
-                <th className="py-2 px-4 border-b">Nivel</th>
+                <th className="py-2 px-4 border-b">Nivel Escolar</th>
                 <th className="py-2 px-4 border-b">Grado</th>
-                <th className="py-2 px-4 border-b">Seccion</th>
+                <th className="py-2 px-4 border-b">Sección</th>
                 <th className="py-2 px-4 border-b">Acciones</th>
               </tr>
             </thead>
@@ -246,7 +241,9 @@ export default function PersonManagement() {
                 return (
                   <tr key={person.id} className="text-center">
                     <td className="py-2 px-4 border-b">{person.id}</td>
-                    <td className="py-2 px-4 border-b">{person.firstName} {person.lastName}</td>
+                    <td className="py-2 px-4 border-b">
+                      {person.firstName} {person.lastName}
+                    </td>
                     <td className="py-2 px-4 border-b">{person.dni || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.birthDate || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.gender || "-"}</td>
@@ -255,9 +252,9 @@ export default function PersonManagement() {
                     <td className="py-2 px-4 border-b">{user?.username || "-"}</td>
                     <td className="py-2 px-4 border-b">{user?.email || "-"}</td>
                     <td className="py-2 px-4 border-b">{user?.roles ? user.roles.join(", ") : "-"}</td>
-                    <td className="py-2 px-4 border-b">{person.schoolLevel}</td>
-                    <td className="py-2 px-4 border-b">{person.grade}</td>
-                    <td className="py-2 px-4 border-b">{person.section}</td>
+                    <td className="py-2 px-4 border-b">{person.schoolLevel || "-"}</td>
+                    <td className="py-2 px-4 border-b">{person.grade || "-"}</td>
+                    <td className="py-2 px-4 border-b">{person.section || "-"}</td>
                     <td className="py-2 px-4 border-b space-x-2">
                       <button
                         onClick={() => openEditModal(person)}
@@ -422,7 +419,8 @@ export default function PersonManagement() {
                   </div>
                   <div>
                     <label className="block text-gray-700">
-                      Contraseña <span className="text-sm text-gray-500">(Dejar en blanco para mantener actual)</span>
+                      Contraseña{" "}
+                      <span className="text-sm text-gray-500">(Dejar en blanco para no cambiar)</span>
                     </label>
                     <input
                       type="password"
@@ -458,7 +456,7 @@ export default function PersonManagement() {
                 onClick={() => setShowEditModal(false)}
                 className="px-4 py-2 rounded border"
               >
-                Cancelar
+                Cerrar
               </button>
               <button
                 onClick={handleSaveEdit}
@@ -483,7 +481,7 @@ export default function PersonManagement() {
                 onClick={() => setShowDeleteModal(false)}
                 className="px-4 py-2 rounded border"
               >
-                Cancelar
+                Cerrar
               </button>
               <button
                 onClick={handleConfirmDelete}
@@ -674,7 +672,7 @@ export default function PersonManagement() {
                 onClick={() => setShowCreateModal(false)}
                 className="px-4 py-2 rounded border"
               >
-                Cancelar
+                Cerrar
               </button>
               <button
                 type="button"
@@ -687,6 +685,15 @@ export default function PersonManagement() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de Excel Upload */}
+      {showExcelModal && (
+        <ExcelUploadModal 
+          isOpen={showExcelModal}
+          onClose={() => setShowExcelModal(false)}
+          onUploadSuccess={fetchPersons}
+        />
       )}
     </div>
   );
