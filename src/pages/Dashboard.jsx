@@ -7,11 +7,6 @@ const Dashboard = () => {
   const { user, person, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/auth/login');
-  };
-
   return (
     <div>
       <h1>Dashboard</h1>
@@ -21,7 +16,6 @@ const Dashboard = () => {
       <p>Username: {user.username}</p>
       <p>Email: {user.email}</p>
       <p>Roles: {user.roles.join(', ')}</p>
-      <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
 };

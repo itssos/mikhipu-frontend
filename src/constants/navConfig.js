@@ -4,6 +4,7 @@ import {
   ChatBubbleLeftIcon,
   UserIcon,
   Cog6ToothIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline'
 import { ROUTES } from './routes'
 
@@ -22,23 +23,28 @@ export const NAV_CONFIG = [
     Icon: HomeIcon,
     roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO'],
   },
+  // {
+  //   name: 'Mensajes',
+  //   path: '/messages',
+  //   Icon: ChatBubbleLeftIcon,
+  //   roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE'],
+  // },
+  // {
+  //   name: 'Perfil',
+  //   path: '/profile',
+  //   Icon: UserIcon,
+  //   roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO'],
+  // },
+  // {
+  //   name: 'Admin',
+  //   path: ROUTES.ADMIN,
+  //   Icon: Cog6ToothIcon,
+  //   roles: ['ADMINISTRADOR'],
+  // },
   {
-    name: 'Mensajes',
-    path: '/messages',
-    Icon: ChatBubbleLeftIcon,
-    roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE'],
-  },
-  {
-    name: 'Perfil',
-    path: '/profile',
-    Icon: UserIcon,
-    roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO'],
-  },
-  {
-    name: 'Admin',
-    path: ROUTES.ADMIN,
-    Icon: Cog6ToothIcon,
+    name: 'Usuarios',
+    path: ROUTES.ROLE_MANAGEMENT,
+    Icon: UsersIcon,
     roles: ['ADMINISTRADOR'],
-  },
-  
+  }  
 ]

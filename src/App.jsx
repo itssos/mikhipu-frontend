@@ -12,6 +12,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPassword';
 import ResetPasswordPage from './pages/auth/ResetPassword';
 import NotFound from './pages/error/NotFound';
 import Layout from './components/Layout';
+import PersonManagement from './pages/PersonManagement';
 
 function App() {
   return (
@@ -39,6 +40,18 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          <Route
+            path="/admin/persons"
+            element={
+              <PrivateRoute allowedRoles={['ADMINISTRADOR']}>
+                <Layout>
+                  <PersonManagement />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
           <Route path="/not-authorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
