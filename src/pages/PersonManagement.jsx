@@ -1,10 +1,21 @@
 // Dentro de PersonManagement.jsx (vista completa, se incluye la parte relevante)
 import React, { useEffect, useState } from "react";
 import { getPersons, createPerson, updatePerson, deletePerson } from "../api/person";
+import { getRoles } from '../api/roles';
 import { assignRoleToUser } from "../api/user";
 import ExcelUploadModal from "../components/ExcelUploadModal";
+import RoleCrudModal from "../components/RoleCrudModal";
+import EditButton from "../components/UI/EditButton";
+import AddPersonButton from "../components/UI/AddPersonButton";
+import DeleteButton from "../components/UI/DeletButton";
+import { toast } from "react-toastify";
 
-const ROLE_OPTIONS = ["ADMINISTRADOR", "DOCENTE", "ESTUDIANTE", "APODERADO"];
+const ROLE_OPTIONS = [
+  // "ADMINISTRADOR",
+  // "DOCENTE",
+  "ESTUDIANTE",
+  // "APODERADO"
+];
 const initialForm = {
   firstName: "",
   lastName: "",
@@ -38,6 +49,10 @@ export default function PersonManagement() {
   const [createForm, setCreateForm] = useState(initialForm);
   const [showExcelModal, setShowExcelModal] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [roles, setRoles] = useState([]);
+
   const fetchPersons = async () => {
     setLoading(true);
     setGlobalError("");
@@ -50,8 +65,19 @@ export default function PersonManagement() {
     setLoading(false);
   };
 
+  const fetchRoles = async () => {
+    try {
+      const data = await getRoles();
+      setRoles(data);
+      //await fetchRoles();
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     fetchPersons();
+    fetchRoles();
   }, []);
 
   const handleFormChange = (e, setForm) => {
@@ -83,7 +109,7 @@ export default function PersonManagement() {
 
   const handleSaveEdit = async () => {
     if (!editForm) return;
-    if (!editForm.firstName || !editForm.lastName || !editForm.username || !editForm.email || !editForm.role) {
+    if (!editForm.firstName || !editForm.lastName || !editForm.role) {
       setGlobalError("Complete los campos obligatorios.");
       return;
     }
@@ -116,6 +142,7 @@ export default function PersonManagement() {
       await fetchPersons();
     } catch (err) {
       setGlobalError(err.message);
+      toast.error(err.message);
     }
     setActionLoading(false);
   };
@@ -149,12 +176,17 @@ export default function PersonManagement() {
   };
 
   const handleSaveCreate = async () => {
+
+    console.log(createForm);
+    if (createForm.username == "") {
+      createForm.username = null
+      createForm.email = null
+      createForm.password = null
+    }
+
     if (
       !createForm.firstName ||
       !createForm.lastName ||
-      !createForm.username ||
-      !createForm.email ||
-      !createForm.password ||
       !createForm.role
     ) {
       setGlobalError("Complete los campos obligatorios.");
@@ -189,6 +221,7 @@ export default function PersonManagement() {
       await fetchPersons();
     } catch (err) {
       setGlobalError(err.message);
+      toast.error(err.message);
     }
     setActionLoading(false);
   };
@@ -198,33 +231,75 @@ export default function PersonManagement() {
       <h1 className="text-2xl font-bold mb-6 text-center">Administración de Personas</h1>
       {globalError && <div className="text-red-500 mb-4 text-center">{globalError}</div>}
       {actionMessage && <div className="text-green-500 mb-4 text-center">{actionMessage}</div>}
-      <div className="flex justify-end mb-4 space-x-2">
-        <button
-          onClick={openCreateModal}
-          className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Nueva Persona
-        </button>
+      <div className="flex justify-end mb-4 space-x-4">
+        <div>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer hover:scale-110 duration-300"
+          >
+            Roles
+          </button>
+          <RoleCrudModal open={modalOpen} onClose={() => setModalOpen(false)} />
+        </div>
+        <AddPersonButton onClick={openCreateModal} />
         <button
           onClick={() => setShowExcelModal(true)}
-          className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded"
+          className="hover:scale-110 cursor-pointer shadow-sm shadow-black transition-normal duration-300 p-1 rounded"
         >
-          Importar Excel
+          <svg
+            viewBox="0 0 32 32"
+            width={"32"}
+            height={"32"}
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <defs>
+                <linearGradient
+                  id="a"
+                  x1="4.494"
+                  y1="-2092.086"
+                  x2="13.832"
+                  y2="-2075.914"
+                  gradientTransform="translate(0 2100)"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0" stopColor="#18884f"></stop>
+                  <stop offset="0.5" stopColor="#117e43"></stop>
+                  <stop offset="1" stopColor="#0b6631"></stop>
+                </linearGradient>
+              </defs>
+              <title>file_type_excel</title>
+              <path d="M19.581,15.35,8.512,13.4V27.809A1.192,1.192,0,0,0,9.705,29h19.1A1.192,1.192,0,0,0,30,27.809h0V22.5Z" style={{ fill: "#185c37" }} />
+              <path d="M19.581,3H9.705A1.192,1.192,0,0,0,8.512,4.191h0V9.5L19.581,16l5.861,1.95L30,16V9.5Z" style={{ fill: "#21a366" }} />
+              <path d="M8.512,9.5H19.581V16H8.512Z" style={{ fill: "#107c41" }} />
+              <path d="M16.434,8.2H8.512V24.45h7.922a1.2,1.2,0,0,0,1.194-1.191V9.391A1.2,1.2,0,0,0,16.434,8.2Z" style={{ opacity: 0.1, isolation: "isolate" }} />
+              <path d="M15.783,8.85H8.512V25.1h7.271a1.2,1.2,0,0,0,1.194-1.191V10.041A1.2,1.2,0,0,0,15.783,8.85Z" style={{ opacity: 0.2, isolation: "isolate" }} />
+              <path d="M15.783,8.85H8.512V23.8h7.271a1.2,1.2,0,0,0,1.194-1.191V10.041A1.2,1.2,0,0,0,15.783,8.85Z" style={{ opacity: 0.2, isolation: "isolate" }} />
+              <path d="M15.132,8.85H8.512V23.8h6.62a1.2,1.2,0,0,0,1.194-1.191V10.041A1.2,1.2,0,0,0,15.132,8.85Z" style={{ opacity: 0.2, isolation: "isolate" }} />
+              <path d="M3.194,8.85H15.132a1.193,1.193,0,0,1,1.194,1.191V21.959a1.193,1.193,0,0,1-1.194,1.191H3.194A1.192,1.192,0,0,1,2,21.959V10.041A1.192,1.192,0,0,1,3.194,8.85Z" style={{ fill: "url(#a)" }} />
+              <path d="M5.7,19.873l2.511-3.884-2.3-3.862H7.758L9.013,14.6c.116.234.2.408.238.524h.017c.082-.188.169-.369.26-.546l1.342-2.447h1.7l-2.359,3.84,2.419,3.905H10.821l-1.45-2.711A2.355,2.355,0,0,1,9.2,16.8H9.176a1.688,1.688,0,0,1-.168.351L7.515,19.873Z" style={{ fill: "#fff" }} />
+              <path d="M28.806,3H19.581V9.5H30V4.191A1.192,1.192,0,0,0,28.806,3Z" style={{ fill: "#33c481" }} />
+              <path d="M19.581,16H30v6.5H19.581Z" style={{ fill: "#107c41" }} />
+            </g>
+          </svg>
         </button>
       </div>
       {loading ? (
         <div className="text-center py-10">Cargando personas...</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow-md">
+        <div className="w-full overflow-auto rounded-2xl shadow-md shadow-black">
+          <table className="w-full bg-white">
             <thead>
               <tr className="bg-gray-100">
                 <th className="py-2 px-4 border-b">ID</th>
                 <th className="py-2 px-4 border-b">Nombre Completo</th>
-                <th className="py-2 px-4 border-b">DNI</th>
-                <th className="py-2 px-4 border-b">Nacimiento</th>
+                {/* <th className="py-2 px-4 border-b">DNI</th> */}
+                {/* <th className="py-2 px-4 border-b">Nacimiento</th> */}
                 <th className="py-2 px-4 border-b">Género</th>
-                <th className="py-2 px-4 border-b">Dirección</th>
+                {/* <th className="py-2 px-4 border-b">Dirección</th> */}
                 <th className="py-2 px-4 border-b">Teléfono</th>
                 <th className="py-2 px-4 border-b">Usuario</th>
                 <th className="py-2 px-4 border-b">Email</th>
@@ -244,10 +319,10 @@ export default function PersonManagement() {
                     <td className="py-2 px-4 border-b">
                       {person.firstName} {person.lastName}
                     </td>
-                    <td className="py-2 px-4 border-b">{person.dni || "-"}</td>
-                    <td className="py-2 px-4 border-b">{person.birthDate || "-"}</td>
+                    {/* <td className="py-2 px-4 border-b">{person.dni || "-"}</td> */}
+                    {/* <td className="py-2 px-4 border-b">{person.birthDate || "-"}</td> */}
                     <td className="py-2 px-4 border-b">{person.gender || "-"}</td>
-                    <td className="py-2 px-4 border-b">{person.address || "-"}</td>
+                    {/* <td className="py-2 px-4 border-b">{person.address || "-"}</td> */}
                     <td className="py-2 px-4 border-b">{person.phone || "-"}</td>
                     <td className="py-2 px-4 border-b">{user?.username || "-"}</td>
                     <td className="py-2 px-4 border-b">{user?.email || "-"}</td>
@@ -256,18 +331,9 @@ export default function PersonManagement() {
                     <td className="py-2 px-4 border-b">{person.grade || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.section || "-"}</td>
                     <td className="py-2 px-4 border-b space-x-2">
-                      <button
-                        onClick={() => openEditModal(person)}
-                        className="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1 rounded"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => openDeleteModal(person.id)}
-                        className="bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded"
-                      >
-                        Eliminar
-                      </button>
+
+                      <EditButton className="w-8 h-8 p-1" onClick={() => openEditModal(person)} />
+                      <DeleteButton className="w-8 h-8 p-1" onClick={() => openDeleteModal(person.id)} />
                     </td>
                   </tr>
                 );
@@ -441,9 +507,9 @@ export default function PersonManagement() {
                       required
                     >
                       <option value="">Seleccione</option>
-                      {ROLE_OPTIONS.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.name}>
+                          {role.name}
                         </option>
                       ))}
                     </select>
@@ -689,7 +755,7 @@ export default function PersonManagement() {
 
       {/* Modal de Excel Upload */}
       {showExcelModal && (
-        <ExcelUploadModal 
+        <ExcelUploadModal
           isOpen={showExcelModal}
           onClose={() => setShowExcelModal(false)}
           onUploadSuccess={fetchPersons}

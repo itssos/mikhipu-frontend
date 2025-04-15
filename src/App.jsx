@@ -53,7 +53,13 @@ function App() {
           />
 
           <Route path="/not-authorized" element={<NotAuthorized />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={
+            <PrivateRoute allowedRoles={['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO']}>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </PrivateRoute>
+          } />
         </Routes>
       </Router>
     </AuthProvider>
