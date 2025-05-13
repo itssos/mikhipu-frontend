@@ -5,6 +5,9 @@ import {
   UserIcon,
   Cog6ToothIcon,
   UsersIcon,
+  DocumentCurrencyDollarIcon,
+  AcademicCapIcon,
+  BookOpenIcon
 } from '@heroicons/react/24/outline'
 import { ROUTES } from './routes'
 
@@ -46,5 +49,23 @@ export const NAV_CONFIG = [
     path: ROUTES.ROLE_MANAGEMENT,
     Icon: UsersIcon,
     roles: ['ADMINISTRADOR'],
-  }  
+  },
+  {
+    name: 'Matriculas',
+    path: ROUTES.STUDENT_ENROLLMENT,
+    Icon: DocumentCurrencyDollarIcon,
+    roles: ['ADMINISTRADOR'],
+  },
+  {
+    name: 'Docente',
+    path: ROUTES.TEACHER,
+    Icon: AcademicCapIcon,
+    roles: ['ADMINISTRADOR'],
+  },
+  {
+    name: 'Cursos',
+    path: ROUTES.COURSE,
+    Icon: BookOpenIcon,
+    roles: ['ADMINISTRADOR'],
+  }
 ]

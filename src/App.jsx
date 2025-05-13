@@ -13,6 +13,9 @@ import ResetPasswordPage from './pages/auth/ResetPassword';
 import NotFound from './pages/error/NotFound';
 import Layout from './components/Layout';
 import PersonManagement from './pages/PersonManagement';
+import EnrollmentPage from './pages/EnrollmentPage';
+import Teacher from './pages/Teacher';
+import CoursePage from './pages/CoursePage';
 
 function App() {
   return (
@@ -47,6 +50,39 @@ function App() {
               <PrivateRoute allowedPermissions={['GET_PERSONS']}>
                 <Layout>
                   <PersonManagement />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/student/enrollments"
+            element={
+              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
+                <Layout>
+                  <EnrollmentPage />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/teacher"
+            element={
+              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
+                <Layout>
+                  <Teacher />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/course"
+            element={
+              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
+                <Layout>
+                  <CoursePage />
                 </Layout>
               </PrivateRoute>
             }

@@ -3,8 +3,16 @@ import React, { useState, useEffect } from 'react';
 import Modal from './UI/Modal';
 import { getRepresentatives } from '../api/representatives';
 import { getRoles } from '../api/roles';
-import { createStudent, getStudentById, updateStudent } from '../api/students';
+import {
+  createStudent,
+  getStudentById,
+  updateStudent,
+  assignRepresentatives,
+  removeRepresentatives,
+  getStudentRepresentatives
+} from '../api/students';
 import { toast, ToastContainer } from 'react-toastify';
+import Select from 'react-select';
 import {
   IdentificationIcon,
   CalendarIcon,
@@ -46,18 +54,18 @@ const StudentModal = ({ trigger, studentId }) => {
     representativeIds: []
   });
 
+  const [selectedReps, setSelectedReps] = useState([]);
+
   useEffect(() => {
     if (!isOpen) return;
     Promise.all([getRoles(), getRepresentatives()])
-      .then(([rolesData, repsData]) => {
+      .then(async ([rolesData, repsData]) => {
         setRoles(rolesData);
         setReps(repsData);
-      })
-      .catch(err => toast.error(err.message));
 
-    if (studentId) {
-      getStudentById(studentId)
-        .then(s => {
+        if (studentId) {
+          const s = await getStudentById(studentId);
+          const assigned = await getStudentRepresentatives(studentId);
           setStudentForm({
             person: {
               firstName: s.person.firstName,
@@ -76,12 +84,15 @@ const StudentModal = ({ trigger, studentId }) => {
             },
             grade: s.grade.toString(),
             section: s.section,
-            schoolLevel: s.schoolLevel,
-            representativeIds: s.representatives.map(r => r.id)
+            schoolLevel: s.schoolLevel
           });
-        })
-        .catch(err => toast.error(err.message));
-    }
+          setSelectedReps(assigned.map(r => ({
+            value: r.id,
+            label: r.fullName
+          })));
+        }
+      })
+      .catch(err => toast.error(err.message));
   }, [isOpen, studentId]);
 
   const open = () => setIsOpen(true);
@@ -100,29 +111,44 @@ const StudentModal = ({ trigger, studentId }) => {
 
   const handleSave = async () => {
     try {
-      console.log('SUBMIT DATA:', studentForm);
       const dto = {
         person: studentForm.person,
         grade: Number(studentForm.grade),
         section: studentForm.section,
-        schoolLevel: studentForm.schoolLevel,
-        representativeIds: studentForm.representativeIds
+        schoolLevel: studentForm.schoolLevel
       };
-      console.log('DTO:', dto);
-      let resp;
+
+      let student;
       if (studentId) {
-        resp = await updateStudent(studentId, dto);
+        await updateStudent(studentId, dto);
         toast.success('Estudiante actualizado');
+
+        const prev = await getStudentRepresentatives(studentId);
+        const prevIds = prev.map(r => r.id);
+        const newIds = selectedReps.map(r => r.value);
+
+        const toAdd = newIds.filter(id => !prevIds.includes(id));
+        const toRemove = prevIds.filter(id => !newIds.includes(id));
+
+        if (toAdd.length > 0)
+          await assignRepresentatives(studentId, toAdd);
+        if (toRemove.length > 0)
+          await removeRepresentatives(studentId, toRemove);
+
       } else {
-        resp = await createStudent(dto);
+        student = await createStudent({ ...dto, representativeIds: [] });
         toast.success('Estudiante creado');
+
+        if (selectedReps.length > 0)
+          await assignRepresentatives(student.id, selectedReps.map(r => r.value));
       }
-      console.log('RESPUESTA:', resp);
+
       close();
     } catch (err) {
       toast.error(err.message);
     }
   };
+
 
   return (
     <>
@@ -311,7 +337,7 @@ const StudentModal = ({ trigger, studentId }) => {
                 onChange={e => handleChange('section', e.target.value)}
                 className="w-full border p-2 rounded"
               >
-                {['A','B','C','D','E','F'].map(s => (
+                {['A', 'B', 'C', 'D', 'E', 'F'].map(s => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
@@ -335,21 +361,18 @@ const StudentModal = ({ trigger, studentId }) => {
                 <UserGroupIcon className="w-5 h-5 text-gray-500" />
                 <span>Representantes</span>
               </label>
-              <select
-                multiple
-                value={studentForm.representativeIds}
-                onChange={e => {
-                  const opts = Array.from(e.target.selectedOptions).map(o => Number(o.value));
-                  handleChange('representativeIds', opts);
-                }}
-                className="w-full border p-2 rounded h-32"
-              >
-                {reps.map(r => (
-                  <option key={r.id} value={r.id}>
-                    {r.person.firstName} {r.person.lastName} ({r.relationship})
-                  </option>
-                ))}
-              </select>
+              <Select
+                isMulti
+                options={reps.map(r => ({
+                  value: r.id,
+                  label: `${r.person.firstName} ${r.person.lastName} (${r.relationship})`
+                }))}
+                value={selectedReps}
+                onChange={setSelectedReps}
+                className="w-full"
+              />
+
+
             </div>
           </div>
         </div>

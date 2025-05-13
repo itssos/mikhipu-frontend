@@ -32,7 +32,7 @@ export default function Modal({
     <>
       {/* Elemento que dispara el modal */}
       {trigger && (
-        <div onClick={handleOpen} className="m-0">
+        <div onClick={handleOpen} className="">
           {trigger}
         </div>
       )}

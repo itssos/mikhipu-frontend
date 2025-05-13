@@ -7,4 +7,7 @@ export const ROUTES = {
   ADMIN: "/admin",
   NOT_AUTHORIZED: "/not-authorized",
   ROLE_MANAGEMENT: "/admin/persons",
+  STUDENT_ENROLLMENT: "/admin/student/enrollments",
+  TEACHER: "/admin/teacher",
+  COURSE: "/admin/course"
 };

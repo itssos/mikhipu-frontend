@@ -1,38 +1,14 @@
 // Dentro de PersonManagement.jsx (vista completa, se incluye la parte relevante)
-import React, { useEffect, useState } from "react";
-import { ShieldCheckIcon } from '@heroicons/react/24/outline';
-import { getPersons, createPerson, updatePerson, deletePerson } from "../api/person";
-import { getRoles } from '../api/roles';
-import { assignRoleToUser } from "../api/user";
+import { useEffect, useState } from "react";
+import { ShieldCheckIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { getStudents, deleteStudent } from "../api/students";
 import ExcelUploadModal from "../components/ExcelUploadModal";
 import RoleCrudModal from "../components/RoleCrudModal";
 import EditButton from "../components/UI/EditButton";
 import AddPersonButton from "../components/UI/AddPersonButton";
 import DeleteButton from "../components/UI/DeleteButton";
-import { toast } from "react-toastify";
-
-const ROLE_OPTIONS = [
-  // "ADMINISTRADOR",
-  // "DOCENTE",
-  "ESTUDIANTE",
-  // "APODERADO"
-];
-const initialForm = {
-  firstName: "",
-  lastName: "",
-  dni: "",
-  birthDate: "",
-  gender: "",
-  address: "",
-  phone: "",
-  grade: "",
-  section: "",
-  schoolLevel: "",
-  username: "",
-  email: "",
-  password: "",
-  role: "",
-};
+import CourseStudentModal from '../components/modals/CourseStudentModal';
+import StudentModal from '../components/StudentModal';
 
 export default function PersonManagement() {
   const [persons, setPersons] = useState([]);
@@ -42,23 +18,17 @@ export default function PersonManagement() {
   const [actionLoading, setActionLoading] = useState(false);
 
   // Estados para modales
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [createForm, setCreateForm] = useState(initialForm);
   const [showExcelModal, setShowExcelModal] = useState(false);
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [roles, setRoles] = useState([]);
-
-  const fetchPersons = async () => {
+  const fetchStudent = async () => {
     setLoading(true);
     setGlobalError("");
     try {
-      const data = await getPersons();
+      const data = await getStudents();
+      console.log(data);
+
       setPersons(data);
     } catch (err) {
       setGlobalError(err.message);
@@ -66,87 +36,10 @@ export default function PersonManagement() {
     setLoading(false);
   };
 
-  const fetchRoles = async () => {
-    try {
-      const data = await getRoles();
-      setRoles(data);
-      //await fetchRoles();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
 
   useEffect(() => {
-    fetchPersons();
-    fetchRoles();
+    fetchStudent();
   }, []);
-
-  const handleFormChange = (e, setForm) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // --- Modal de Edición ---
-  const openEditModal = (person) => {
-    setEditForm({
-      id: person.id,
-      firstName: person.firstName || "",
-      lastName: person.lastName || "",
-      dni: person.dni || "",
-      birthDate: person.birthDate || "",
-      gender: person.gender || "",
-      address: person.address || "",
-      phone: person.phone || "",
-      grade: person.grade || "",
-      section: person.section || "",
-      schoolLevel: person.schoolLevel || "",
-      username: person.user?.username || "",
-      email: person.user?.email || "",
-      password: "",
-      role: (person.user?.roles && person.user.roles[0]) || "",
-    });
-    setShowEditModal(true);
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editForm) return;
-    if (!editForm.firstName || !editForm.lastName || !editForm.role) {
-      setGlobalError("Complete los campos obligatorios.");
-      return;
-    }
-    setActionLoading(true);
-    setGlobalError("");
-    try {
-      const updatedData = {
-        type: editForm.role,
-        firstName: editForm.firstName,
-        lastName: editForm.lastName,
-        dni: editForm.dni,
-        birthDate: editForm.birthDate,
-        gender: editForm.gender,
-        address: editForm.address,
-        phone: editForm.phone,
-        grade: editForm.grade ? parseInt(editForm.grade) : null,
-        section: editForm.section,
-        schoolLevel: editForm.schoolLevel,
-        user: {
-          username: editForm.username,
-          email: editForm.email,
-          ...(editForm.password && { password: editForm.password }),
-          roles: [editForm.role],
-        },
-      };
-      await updatePerson(editForm.id, updatedData);
-      setActionMessage("Persona actualizada con éxito.");
-      setTimeout(() => setActionMessage(""), 2000);
-      setShowEditModal(false);
-      await fetchPersons();
-    } catch (err) {
-      setGlobalError(err.message);
-      toast.error(err.message);
-    }
-    setActionLoading(false);
-  };
 
   // --- Modal de Eliminación ---
   const openDeleteModal = (id) => {
@@ -159,70 +52,13 @@ export default function PersonManagement() {
     setActionLoading(true);
     setGlobalError("");
     try {
-      await deletePerson(deleteId);
+      await deleteStudent(deleteId);
       setActionMessage("Persona eliminada con éxito.");
       setTimeout(() => setActionMessage(""), 2000);
       setShowDeleteModal(false);
-      await fetchPersons();
+      await fetchStudent();
     } catch (err) {
       setGlobalError(err.message);
-    }
-    setActionLoading(false);
-  };
-
-  // --- Modal de Creación ---
-  const openCreateModal = () => {
-    setCreateForm(initialForm);
-    setShowCreateModal(true);
-  };
-
-  const handleSaveCreate = async () => {
-
-    console.log(createForm);
-    if (createForm.username == "") {
-      createForm.username = null
-      createForm.email = null
-      createForm.password = null
-    }
-
-    if (
-      !createForm.firstName ||
-      !createForm.lastName ||
-      !createForm.role
-    ) {
-      setGlobalError("Complete los campos obligatorios.");
-      return;
-    }
-    setActionLoading(true);
-    setGlobalError("");
-    try {
-      const newPersonData = {
-        type: createForm.role,
-        firstName: createForm.firstName,
-        lastName: createForm.lastName,
-        dni: createForm.dni,
-        birthDate: createForm.birthDate,
-        gender: createForm.gender,
-        address: createForm.address,
-        phone: createForm.phone,
-        grade: createForm.grade ? parseInt(createForm.grade) : null,
-        section: createForm.section,
-        schoolLevel: createForm.schoolLevel,
-        user: {
-          username: createForm.username,
-          email: createForm.email,
-          password: createForm.password,
-          roles: [createForm.role],
-        },
-      };
-      await createPerson(newPersonData);
-      setActionMessage("Persona creada con éxito.");
-      setTimeout(() => setActionMessage(""), 2000);
-      setShowCreateModal(false);
-      await fetchPersons();
-    } catch (err) {
-      setGlobalError(err.message);
-      toast.error(err.message);
     }
     setActionLoading(false);
   };
@@ -238,7 +74,15 @@ export default function PersonManagement() {
             <ShieldCheckIcon className="h-8 w-8 text-gray-500" />
           </button>
         } />
-        <AddPersonButton onClick={openCreateModal} />
+        <CourseStudentModal trigger={
+          <button className="hover:scale-110 cursor-pointer shadow-sm shadow-black transition-normal duration-300 p-1 w-10 h-10 rounded">
+            <BookOpenIcon className="h-8 w-8 text-gray-500" />
+          </button>
+        } />
+
+        <StudentModal trigger={
+          <AddPersonButton />
+        } />
         <button
           onClick={() => setShowExcelModal(true)}
           className="hover:scale-110 cursor-pointer shadow-sm shadow-black transition-normal duration-300 p-1 rounded"
@@ -293,14 +137,7 @@ export default function PersonManagement() {
               <tr className="bg-gray-100">
                 <th className="py-2 px-4 border-b">ID</th>
                 <th className="py-2 px-4 border-b">Nombre Completo</th>
-                {/* <th className="py-2 px-4 border-b">DNI</th> */}
-                {/* <th className="py-2 px-4 border-b">Nacimiento</th> */}
-                <th className="py-2 px-4 border-b">Género</th>
-                {/* <th className="py-2 px-4 border-b">Dirección</th> */}
-                <th className="py-2 px-4 border-b">Teléfono</th>
-                <th className="py-2 px-4 border-b">Usuario</th>
-                <th className="py-2 px-4 border-b">Email</th>
-                <th className="py-2 px-4 border-b">Rol</th>
+                <th className="py-2 px-4 border-b">DNI</th>
                 <th className="py-2 px-4 border-b">Nivel Escolar</th>
                 <th className="py-2 px-4 border-b">Grado</th>
                 <th className="py-2 px-4 border-b">Sección</th>
@@ -314,22 +151,19 @@ export default function PersonManagement() {
                   <tr key={person.id} className="text-center">
                     <td className="py-2 px-4 border-b">{person.id}</td>
                     <td className="py-2 px-4 border-b">
-                      {person.firstName} {person.lastName}
+                      {person.fullName}
                     </td>
-                    {/* <td className="py-2 px-4 border-b">{person.dni || "-"}</td> */}
-                    {/* <td className="py-2 px-4 border-b">{person.birthDate || "-"}</td> */}
-                    <td className="py-2 px-4 border-b">{person.gender || "-"}</td>
-                    {/* <td className="py-2 px-4 border-b">{person.address || "-"}</td> */}
-                    <td className="py-2 px-4 border-b">{person.phone || "-"}</td>
-                    <td className="py-2 px-4 border-b">{user?.username || "-"}</td>
-                    <td className="py-2 px-4 border-b">{user?.email || "-"}</td>
-                    <td className="py-2 px-4 border-b">{user?.roles ? user.roles.join(", ") : "-"}</td>
+                    <td className="py-2 px-4 border-b">{person.dni || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.schoolLevel || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.grade || "-"}</td>
                     <td className="py-2 px-4 border-b">{person.section || "-"}</td>
                     <td className="py-2 px-4 border-b space-x-2">
-
-                      <EditButton className="w-8 h-8 p-1" onClick={() => openEditModal(person)} />
+                      <div>
+                        <StudentModal trigger={
+                          <EditButton className="w-8 h-8 p-1" />
+                        } studentId={person.id} />
+                      </div>
+                      {person.studentId}
                       <DeleteButton className="w-8 h-8 p-1" onClick={() => openDeleteModal(person.id)} />
                     </td>
                   </tr>
@@ -340,198 +174,6 @@ export default function PersonManagement() {
         </div>
       )}
 
-      {/* Modal de Edición */}
-      {showEditModal && editForm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-2xl mx-4">
-            <h2 className="text-xl font-bold mb-4">Editar Persona</h2>
-            <form className="space-y-6">
-              {/* Sección de Datos de Persona */}
-              <div>
-                <h3 className="font-semibold mb-2">Datos de Persona</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-gray-700">Nombre</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={editForm.firstName}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Apellido</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={editForm.lastName}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">DNI</label>
-                    <input
-                      type="text"
-                      name="dni"
-                      value={editForm.dni}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Nacimiento</label>
-                    <input
-                      type="date"
-                      name="birthDate"
-                      value={editForm.birthDate}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Género</label>
-                    <input
-                      type="text"
-                      name="gender"
-                      value={editForm.gender}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Dirección</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={editForm.address}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Teléfono</label>
-                    <input
-                      type="text"
-                      name="phone"
-                      value={editForm.phone}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Grado</label>
-                    <input
-                      type="number"
-                      name="grade"
-                      value={editForm.grade}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Sección</label>
-                    <input
-                      type="text"
-                      name="section"
-                      value={editForm.section}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Nivel Escolar</label>
-                    <input
-                      type="text"
-                      name="schoolLevel"
-                      value={editForm.schoolLevel}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* Sección de Datos del Usuario */}
-              <div>
-                <h3 className="font-semibold mb-2">Datos del Usuario</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-gray-700">Usuario</label>
-                    <input
-                      type="text"
-                      name="username"
-                      value={editForm.username}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={editForm.email}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">
-                      Contraseña{" "}
-                      <span className="text-sm text-gray-500">(Dejar en blanco para no cambiar)</span>
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={editForm.password}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      placeholder="(Opcional)"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Rol</label>
-                    <select
-                      name="role"
-                      value={editForm.role}
-                      onChange={(e) => handleFormChange(e, setEditForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    >
-                      <option value="">Seleccione</option>
-                      {roles.map((role) => (
-                        <option key={role.id} value={role.name}>
-                          {role.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <div className="flex justify-end mt-6 space-x-4">
-              <button
-                onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 rounded border"
-              >
-                Cerrar
-              </button>
-              <button
-                onClick={handleSaveEdit}
-                disabled={actionLoading}
-                className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-              >
-                {actionLoading ? "Guardando..." : "Guardar"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Modal de Eliminación */}
       {showDeleteModal && (
@@ -558,204 +200,12 @@ export default function PersonManagement() {
         </div>
       )}
 
-      {/* Modal de Creación */}
-      {showCreateModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-2xl mx-4">
-            <h2 className="text-xl font-bold mb-4">Crear Nueva Persona</h2>
-            <form className="space-y-6">
-              {/* Sección de Datos de Persona */}
-              <div>
-                <h3 className="font-semibold mb-2">Datos de Persona</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-gray-700">Nombre</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={createForm.firstName}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Apellido</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={createForm.lastName}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">DNI</label>
-                    <input
-                      type="text"
-                      name="dni"
-                      value={createForm.dni}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Nacimiento</label>
-                    <input
-                      type="date"
-                      name="birthDate"
-                      value={createForm.birthDate}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Género</label>
-                    <input
-                      type="text"
-                      name="gender"
-                      value={createForm.gender}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Dirección</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={createForm.address}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Teléfono</label>
-                    <input
-                      type="text"
-                      name="phone"
-                      value={createForm.phone}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Grado</label>
-                    <input
-                      type="number"
-                      name="grade"
-                      value={createForm.grade}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Sección</label>
-                    <input
-                      type="text"
-                      name="section"
-                      value={createForm.section}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Nivel Escolar</label>
-                    <input
-                      type="text"
-                      name="schoolLevel"
-                      value={createForm.schoolLevel}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* Sección de Datos del Usuario */}
-              <div>
-                <h3 className="font-semibold mb-2">Datos del Usuario</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-gray-700">Usuario</label>
-                    <input
-                      type="text"
-                      name="username"
-                      value={createForm.username}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={createForm.email}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Contraseña</label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={createForm.password}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700">Rol</label>
-                    <select
-                      name="role"
-                      value={createForm.role}
-                      onChange={(e) => handleFormChange(e, setCreateForm)}
-                      className="w-full border rounded px-3 py-2"
-                      required
-                    >
-                      <option value="">Seleccione</option>
-                      {ROLE_OPTIONS.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <div className="flex justify-end mt-6 space-x-4">
-              <button
-                type="button"
-                onClick={() => setShowCreateModal(false)}
-                className="px-4 py-2 rounded border"
-              >
-                Cerrar
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveCreate}
-                disabled={actionLoading}
-                className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-              >
-                {actionLoading ? "Guardando..." : "Guardar"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Modal de Excel Upload */}
       {showExcelModal && (
         <ExcelUploadModal
           isOpen={showExcelModal}
           onClose={() => setShowExcelModal(false)}
-          onUploadSuccess={fetchPersons}
+          onUploadSuccess={fetchStudent}
         />
       )}
     </div>
