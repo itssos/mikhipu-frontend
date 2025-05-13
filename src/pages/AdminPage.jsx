@@ -20,7 +20,6 @@ const AdminPage = () => {
       </p>
       <p>Username: {user.username}</p>
       <p>Email: {user.email}</p>
-      <p>Roles: {user.roles.join(', ')}</p>
       <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );

@@ -44,7 +44,7 @@ function App() {
           <Route
             path="/admin/persons"
             element={
-              <PrivateRoute allowedRoles={['ADMINISTRADOR']}>
+              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
                 <Layout>
                   <PersonManagement />
                 </Layout>

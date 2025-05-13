@@ -7,7 +7,7 @@ import { Bars3Icon, PowerIcon } from '@heroicons/react/24/outline'
 
 export default function HorizontalNavBar() {
   const { user, logout } = useAuth()
-  const userRoles = user?.roles || []
+  const userRoles = user?.role || []
 
   // Filtra ítems según roles: sólo se muestran los que cumplen
   const navItems = NAV_CONFIG.filter(item =>

@@ -1,50 +1,9 @@
-// src/api/roles.js
-import axiosInstance from "./axiosInstance";
+import { api } from './apiHelper';
 
-// Obtiene la lista de roles
-export const getRoles = async () => {
-  try {
-    const response = await axiosInstance.get("/api/roles");
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Error al obtener los roles."
-    );
-  }
-};
-
-// Crea un nuevo rol
-export const createRole = async (roleData) => {
-  try {
-    const response = await axiosInstance.post("/api/roles", roleData);
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Error al crear el rol."
-    );
-  }
-};
-
-// Actualiza un rol existente
-export const updateRole = async (id, roleData) => {
-  try {
-    const response = await axiosInstance.put(`/api/roles/${id}`, roleData);
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Error al actualizar el rol."
-    );
-  }
-};
-
-// Elimina un rol
-export const deleteRole = async (id) => {
-  try {
-    const response = await axiosInstance.delete(`/api/roles/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Error al eliminar el rol."
-    );
-  }
-};
+export const getRoles                 = ()                        => api.get('/api/roles');
+export const getRoleById              = id                        => api.get(`/api/roles/${id}`);
+export const createRole               = roleData                  => api.post('/api/roles', roleData);
+export const updateRole               = (id, roleData)            => api.put(`/api/roles/${id}`, roleData);
+export const deleteRole               = id                        => api.delete(`/api/roles/${id}`);
+export const assignPermissionToRole   = (roleId, permissionName)  => api.post(`/api/roles/${roleId}/permissions/${permissionName}`);
+export const removePermissionFromRole = (roleId, permissionName)  => api.delete(`/api/roles/${roleId}/permissions/${permissionName}`);

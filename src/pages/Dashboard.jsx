@@ -1,7 +1,8 @@
 
-import React from 'react';
+import { React, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import StudentModal from '../components/StudentModal';
 
 const Dashboard = () => {
   const { user, person, logout } = useAuth();
@@ -15,7 +16,15 @@ const Dashboard = () => {
       </p>
       <p>Username: {user.username}</p>
       <p>Email: {user.email}</p>
-      <p>Roles: {user.roles.join(', ')}</p>
+
+      <StudentModal trigger={
+        <button className="bg-green-500 text-white px-4 py-2 rounded">
+          + Nuevo Estudiante
+        </button>
+      } studentId={1} />
+
+
+
     </div>
   );
 };

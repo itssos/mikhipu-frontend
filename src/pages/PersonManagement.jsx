@@ -1,5 +1,6 @@
 // Dentro de PersonManagement.jsx (vista completa, se incluye la parte relevante)
 import React, { useEffect, useState } from "react";
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { getPersons, createPerson, updatePerson, deletePerson } from "../api/person";
 import { getRoles } from '../api/roles';
 import { assignRoleToUser } from "../api/user";
@@ -7,7 +8,7 @@ import ExcelUploadModal from "../components/ExcelUploadModal";
 import RoleCrudModal from "../components/RoleCrudModal";
 import EditButton from "../components/UI/EditButton";
 import AddPersonButton from "../components/UI/AddPersonButton";
-import DeleteButton from "../components/UI/DeletButton";
+import DeleteButton from "../components/UI/DeleteButton";
 import { toast } from "react-toastify";
 
 const ROLE_OPTIONS = [
@@ -232,15 +233,11 @@ export default function PersonManagement() {
       {globalError && <div className="text-red-500 mb-4 text-center">{globalError}</div>}
       {actionMessage && <div className="text-green-500 mb-4 text-center">{actionMessage}</div>}
       <div className="flex justify-end mb-4 space-x-4">
-        <div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer hover:scale-110 duration-300"
-          >
-            Roles
+        <RoleCrudModal trigger={
+          <button className="hover:scale-110 cursor-pointer shadow-sm shadow-black transition-normal duration-300 p-1 w-10 h-10 rounded">
+            <ShieldCheckIcon className="h-8 w-8 text-gray-500" />
           </button>
-          <RoleCrudModal open={modalOpen} onClose={() => setModalOpen(false)} />
-        </div>
+        } />
         <AddPersonButton onClick={openCreateModal} />
         <button
           onClick={() => setShowExcelModal(true)}
