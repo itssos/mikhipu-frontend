@@ -67,5 +67,11 @@ export const NAV_CONFIG = [
     path: ROUTES.COURSE,
     Icon: BookOpenIcon,
     roles: ['ADMINISTRADOR'],
+  },
+  {
+    name: 'Asistencias',
+    path: ROUTES.ASSISTANCE,
+    Icon: BookOpenIcon,
+    roles: ['ADMINISTRADOR'],
   }
 ]

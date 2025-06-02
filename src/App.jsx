@@ -17,6 +17,8 @@ import EnrollmentPage from './pages/EnrollmentPage';
 import Teacher from './pages/Teacher';
 import CoursePage from './pages/CoursePage';
 import { ToastContainer } from 'react-toastify';
+import { ROUTES } from './constants/routes';
+import AssistancePage from './pages/AssistancePage';
 
 function App() {
   return (
@@ -84,6 +86,17 @@ function App() {
               <PrivateRoute allowedPermissions={['GET_PERSONS']}>
                 <Layout>
                   <CoursePage />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path={ROUTES.ASSISTANCE}
+            element={
+              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
+                <Layout>
+                  <AssistancePage />
                 </Layout>
               </PrivateRoute>
             }

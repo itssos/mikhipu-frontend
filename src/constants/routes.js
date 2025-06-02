@@ -8,6 +8,7 @@ export const ROUTES = {
   NOT_AUTHORIZED: "/not-authorized",
   ROLE_MANAGEMENT: "/admin/persons",
   STUDENT_ENROLLMENT: "/admin/student/enrollments",
+  ASSISTANCE: "/admin/assistance",
   TEACHER: "/admin/teacher",
   COURSE: "/admin/course"
 };
