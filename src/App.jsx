@@ -16,6 +16,7 @@ import PersonManagement from './pages/PersonManagement';
 import EnrollmentPage from './pages/EnrollmentPage';
 import Teacher from './pages/Teacher';
 import CoursePage from './pages/CoursePage';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -98,6 +99,7 @@ function App() {
           } />
         </Routes>
       </Router>
+      <ToastContainer />
     </AuthProvider>
   );
 }
