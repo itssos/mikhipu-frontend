@@ -11,7 +11,7 @@ import {
   removeRepresentatives,
   getStudentRepresentatives
 } from '../api/students';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Select from 'react-select';
 import {
   IdentificationIcon,
@@ -377,7 +377,6 @@ const StudentModal = ({ trigger, studentId }) => {
           </div>
         </div>
       </Modal>
-      <ToastContainer />
     </>
   );
 };

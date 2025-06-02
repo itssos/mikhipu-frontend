@@ -12,7 +12,7 @@ import {
 import { getAllPermissions } from "../api/permissions";
 import EditButton from "./UI/EditButton";
 import DeleteButton from "./UI/DeleteButton";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 /**
  * Modal para CRUD completo de roles y asignación de permisos.
@@ -197,7 +197,6 @@ const RoleCrudModal = ({ trigger }) => {
           ))}
         </div>
       </Modal>
-      <ToastContainer />
     </>
   );
 };

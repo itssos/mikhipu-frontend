@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../UI/Modal';
 import { createTeacher, updateTeacher, getTeacherById } from '../../api/teachers';
 import { getRoles } from '../../api/roles';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast} from 'react-toastify';
 import {
   IdentificationIcon,
   CalendarIcon,
@@ -130,7 +130,6 @@ const TeacherModal = ({ trigger, teacherId }) => {
           <InputField label="Código Docente" icon={<IdentificationIcon />} value={form.code} onChange={e => handleChange('code', e.target.value)} />
         </div>
       </Modal>
-      <ToastContainer />
     </>
   );
 };
