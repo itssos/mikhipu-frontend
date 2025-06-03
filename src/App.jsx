@@ -19,6 +19,7 @@ import CoursePage from './pages/CoursePage';
 import { ToastContainer } from 'react-toastify';
 import { ROUTES } from './constants/routes';
 import AssistancePage from './pages/AssistancePage';
+import BookPopper from './components/BookPopper';
 
 function App() {
   return (
@@ -113,6 +114,7 @@ function App() {
         </Routes>
       </Router>
       <ToastContainer />
+      <BookPopper />
     </AuthProvider>
   );
 }
