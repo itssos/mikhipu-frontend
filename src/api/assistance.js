@@ -71,24 +71,78 @@ export const editAssistanceRecord = (id, data) =>
   api.put(`/api/assistance/records/${id}`, data);
 
 /**
- * Consulta registros de asistencia filtrados.
+ * Consulta registros de asistencia filtrados (paginado).
  *
  * @function
- * @param {Object} filter - Filtros: { studentId, entryStatus, exitStatus, startDate, endDate }
- * @returns {Promise<Object[]>} - Lista de registros encontrados.
+ * @param {Object} params - Parámetros de consulta y filtros.
+ * @param {number} [params.studentId] - ID del estudiante.
+ * @param {string} [params.entryStatus] - Estado de entrada ("PRESENTE", "TARDANZA", etc.).
+ * @param {string} [params.exitStatus] - Estado de salida ("SALIDA_REGULAR", "SALIDA_ANTICIPADA", etc.).
+ * @param {string} [params.startDate] - Fecha inicio (YYYY-MM-DD).
+ * @param {string} [params.endDate] - Fecha fin (YYYY-MM-DD).
+ * @param {number} [params.grade] - Grado del estudiante.
+ * @param {string} [params.section] - Sección (ej. "A").
+ * @param {string} [params.schoolLevel] - Nivel escolar ("INICIAL", "PRIMARIA").
+ * @param {number} [params.courseId] - ID del curso.
+ * @param {number} [params.page=0] - Número de página (inicia en 0).
+ * @param {number} [params.size=20] - Tamaño de página.
+ * @param {string} [params.sort] - Orden (ej. "date,desc").
+ * @returns {Promise<Object>} - Objeto paginado: { content, totalElements, totalPages, number, size, ... }
+ *
+ * Cada elemento en content es:
+ * {
+ *   id: number,
+ *   studentId: number,
+ *   firstName: string,
+ *   lastName: string,
+ *   date: string,
+ *   entryMarkedAt: string,
+ *   entryStatus: string,
+ *   exitMarkedAt: string,
+ *   exitStatus: string,
+ *   grade: number,
+ *   section: string,
+ *   schoolLevel: string,
+ *   edited: boolean
+ * }
  */
-export const getAssistanceRecords = filter =>
-  api.get('/api/assistance/records', { params: { filter } });
+export const getAssistanceRecords = params =>
+  api.get('/api/assistance/records', { params });
 
 /**
- * Obtiene estadísticas de asistencia por estudiante y rango.
+ * Obtiene estadísticas de asistencia paginadas y filtradas.
  *
  * @function
- * @param {Object} filter - Filtros: { studentId, startDate, endDate }
- * @returns {Promise<Object>} - Estadísticas de asistencia.
+ * @param {Object} params - Parámetros de consulta y filtros.
+ * @param {number} [params.studentId] - ID del estudiante.
+ * @param {string} [params.entryStatus] - Estado de entrada ("PRESENTE", "TARDANZA", etc.).
+ * @param {string} [params.exitStatus] - Estado de salida ("SALIDA_REGULAR", "SALIDA_ANTICIPADA", etc.).
+ * @param {string} [params.startDate] - Fecha inicio (YYYY-MM-DD).
+ * @param {string} [params.endDate] - Fecha fin (YYYY-MM-DD).
+ * @param {number} [params.grade] - Grado del estudiante.
+ * @param {string} [params.section] - Sección (ej. "A").
+ * @param {string} [params.schoolLevel] - Nivel escolar ("INICIAL", "PRIMARIA").
+ * @param {number} [params.courseId] - ID del curso.
+ * @param {number} [params.page=0] - Página (base 0).
+ * @param {number} [params.size=20] - Tamaño de página.
+ * @param {string} [params.sort] - Orden (ej. "studentFullName,asc").
+ * @returns {Promise<Object>} - Resultado paginado: { content: [AssistanceStatisticsDTO], totalElements, totalPages, number, size, ... }
+ *
+ * Cada elemento en content:
+ * {
+ *   studentId: number,
+ *   studentFullName: string,
+ *   totalSessions: number,
+ *   presentes: number,
+ *   tardanzas: number,
+ *   ausencias: number,
+ *   salidasRegulares: number,
+ *   salidasAnticipadas: number,
+ *   porcentajeAsistencia: number
+ * }
  */
-export const getAssistanceStatistics = filter =>
-  api.get('/api/assistance/report/statistics', { params: { filter } });
+export const getAssistanceStatistics = params =>
+  api.get('/api/assistance/report/statistics', { params });
 
 /**
  * Exporta registros de asistencia a PDF según filtros.

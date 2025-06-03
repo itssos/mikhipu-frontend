@@ -76,7 +76,7 @@ export const assignStudentsToCourse = (courseId, studentIds) =>
  * @returns {Promise} - Confirmación de eliminación.
  */
 export const removeStudentsFromCourse = (courseId, studentIds) =>
-  api.delete(`/api/courses/${courseId}/students`, { data: { studentIds } });
+  api.delete(`/api/courses/${courseId}/students`, { studentIds });
 
 /**
  * Asigna profesores a un curso.
