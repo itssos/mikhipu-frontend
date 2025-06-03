@@ -153,7 +153,7 @@ const StudentModal = ({ trigger, studentId }) => {
   return (
     <>
       <Modal
-        trigger={<div onClick={open}>{trigger}</div>}
+        trigger={<div className='flex justify-center items-center' onClick={open}>{trigger}</div>}
         open={isOpen}
         onClose={close}
         title={studentId ? 'Editar Estudiante' : 'Crear Estudiante'}
