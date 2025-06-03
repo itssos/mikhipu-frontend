@@ -1,6 +1,7 @@
 
 import React from "react";
 import HorizontalNavBar from "./HorizontalNavBar";
+import BalloonGame from "./BalloonGame";
 
 const Layout = ({ children }) => {
 
@@ -19,9 +20,11 @@ const Layout = ({ children }) => {
 
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-100 py-4">
-        <div className="container mx-auto text-center">
+        <div className="flex justify-around items-center">
           &copy; {new Date().getFullYear()} MiKhipu. Todos los derechos reservados.
+          <BalloonGame />
         </div>
+        
       </footer>
     </div>
   );
