@@ -2,12 +2,16 @@
 import React, { useState } from "react";
 import AssistanceConfigForm from "../components/assistance/AssistanceConfigForm"
 import StudentQrScanner from "../components/student/StudentQRScanner"
+import AssistanceRecordsList from "../components/assistance/AssistanceRecordsList";
+import AssistanceStatsDashboard from "../components/assistance/AssistanceStatsDashboard";
+import ManualAssistanceTable from "../components/assistance/ManualAssistanceTable";
 
 const TABS = [
-  { key: "asistencia", title: "Asistencia" },
+  { key: "qr", title: "QR" },
   { key: "config", title: "Configuración" },
   { key: "records", title: "Registros" },
-  { key: "stats", title: "Estadísticas" }
+  { key: "stats", title: "Estadísticas" },
+  { key: "manual", title: "Manual" }
 ];
 
 export default function AssistancePage() {
@@ -38,7 +42,7 @@ export default function AssistancePage() {
 
       {/* Contenido de cada tab */}
       <div className="min-h-[300px]">
-        {tab === "asistencia" && (
+        {tab === "qr" && (
           <div>
             <StudentQrScanner></StudentQrScanner>
           </div>
@@ -50,16 +54,17 @@ export default function AssistancePage() {
         )}
         {tab === "records" && (
           <div>
-            {/* === Contenido del Tab 2: Registros === */}
-            {/* Ejemplo: <AssistanceRecordsList /> */}
-            <p className="text-gray-500 italic">Contenido del tab Registros aquí…</p>
+            <AssistanceRecordsList />
           </div>
         )}
         {tab === "stats" && (
           <div>
-            {/* === Contenido del Tab 3: Estadísticas === */}
-            {/* Ejemplo: <AssistanceStats /> */}
-            <p className="text-gray-500 italic">Contenido del tab Estadísticas aquí…</p>
+            <AssistanceStatsDashboard />
+          </div>
+        )}
+        {tab === "manual" && (
+          <div>
+            <ManualAssistanceTable />
           </div>
         )}
       </div>
