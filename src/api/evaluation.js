@@ -23,7 +23,7 @@ export function createEvaluation(data) {
 // Params: id (Long)
 // Responde: EvaluationResponseDTO
 export function getEvaluationById(id) {
-  return api.get(/api/evaluations/${id});
+  return api.get(`/api/evaluations/${id}`);
 }
 
 // Edita una evaluación existente.
@@ -31,16 +31,16 @@ export function getEvaluationById(id) {
 // Body: EvaluationCreateDTO (igual a createEvaluation)
 // Responde: EvaluationResponseDTO
 export function updateEvaluation(id, data) {
-  return api.put(/api/evaluations/${id}, data);
+  return api.put(`/api/evaluations/${id}`, data);
 }
+
 
 // Elimina una evaluación por ID.
 // Params: id (Long)
 // Responde: { status: 200 }
 export function deleteEvaluation(id) {
-  return api.delete(/api/evaluations/${id});
+  return api.delete(`/api/evaluations/${id}`);
 }
-
 // Lista evaluaciones con filtros y paginación.
 // Body: EvaluationFilterDTO
 /*
