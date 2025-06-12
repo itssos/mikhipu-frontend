@@ -49,7 +49,7 @@ function App() {
           />
 
           <Route
-            path="/admin/persons"
+            path={ROUTES.STUDENT_MANAGEMENT}
             element={
               <PrivateRoute allowedPermissions={['GET_PERSONS']}>
                 <Layout>
@@ -84,7 +84,7 @@ function App() {
           <Route
             path="/admin/course"
             element={
-              <PrivateRoute allowedPermissions={['GET_PERSONS']}>
+              <PrivateRoute >
                 <Layout>
                   <CoursePage />
                 </Layout>
