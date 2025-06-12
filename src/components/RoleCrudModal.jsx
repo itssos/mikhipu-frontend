@@ -112,7 +112,7 @@ const RoleCrudModal = ({ trigger }) => {
       <Modal
         trigger={<div onClick={fetchData}>{trigger}</div>}
         title="Gestión de Roles y Permisos"
-        size="lg"
+        size="xl"
         actions={[
           {
             label: "Cancelar",
@@ -152,7 +152,7 @@ const RoleCrudModal = ({ trigger }) => {
         {editingRole && (
           <div className="mb-6">
             <h4 className="font-semibold mb-2">Permisos disponibles</h4>
-            <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+            <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
               {allPermissions.map(p => {
                 const checked = editingRole.permissions?.some(
                   rp => rp.name === p.name
