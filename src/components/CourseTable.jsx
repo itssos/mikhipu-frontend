@@ -8,12 +8,17 @@ import {
 import CourseModal from './modals/CourseModal';
 import DeleteButton from './UI/DeleteButton';
 import EditButton from './UI/EditButton';
+import useCan from '../hooks/useCan'
 
 export default function CourseTable() {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [reload, setReload] = useState(false);
   const [teacherMap, setTeacherMap] = useState({});
+
+  const canCreate = useCan('CREATE_COURSE');
+  const canUpdate = useCan('UPDATE_COURSE');
+  const canDelete = useCan('DELETE_COURSE');
 
   const fetchCourses = async () => {
     try {
@@ -53,10 +58,12 @@ export default function CourseTable() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6 text-center">Administración de Cursos</h1>
       <div className="flex justify-end mb-4">
-        <CourseModal
-          trigger={<button className="bg-blue-600 text-white px-4 py-2 rounded">Nuevo Curso</button>}
-          onSuccess={() => setReload(!reload)}
-        />
+        {canCreate && (
+          <CourseModal
+            trigger={<button className="bg-blue-600 text-white px-4 py-2 rounded">Nuevo Curso</button>}
+            onSuccess={() => setReload(!reload)}
+          />
+        )}
       </div>
 
       <div className="w-full overflow-auto rounded-2xl shadow-md shadow-black">
@@ -68,7 +75,10 @@ export default function CourseTable() {
               <th className="py-2 px-4 border-b">Año</th>
               <th className="py-2 px-4 border-b">Trimestre</th>
               <th className="py-2 px-4 border-b">Profesores</th>
-              <th className="py-2 px-4 border-b">Acciones</th>
+              {(canUpdate || canDelete) && (
+                <th className="py-2 px-4 border-b">Acciones</th>
+              )}
+
             </tr>
           </thead>
           <tbody>
@@ -85,14 +95,21 @@ export default function CourseTable() {
                     </div>
                   ))}
                 </td>
-                <td className="py-2 px-4 border-b space-x-2">
-                  <CourseModal
-                    course={course}
-                    trigger={<EditButton className="w-8 h-8 p-1" />}
-                    onSuccess={() => setReload(!reload)}
-                  />
-                  <DeleteButton className="w-8 h-8 p-1" onClick={() => handleDelete(course.id)} />
-                </td>
+                {(canUpdate || canDelete) && (
+                  <td className="py-2 px-4 border-b space-x-2">
+                    {canUpdate && (
+                      <CourseModal
+                        course={course}
+                        trigger={<EditButton className="w-8 h-8 p-1" />}
+                        onSuccess={() => setReload(!reload)}
+                      />
+                    )}
+                    {canDelete && (
+                      <DeleteButton className="w-8 h-8 p-1" onClick={() => handleDelete(course.id)} />
+                    )}
+                  </td>
+                )}
+
               </tr>
             ))}
           </tbody>
