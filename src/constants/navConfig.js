@@ -24,7 +24,7 @@ export const NAV_CONFIG = [
     name: 'Dashboard',
     path: ROUTES.DASHBOARD,
     Icon: HomeIcon,
-    roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO'],
+    roles: ['ADMINISTRADOR', 'DOCENTE', 'ESTUDIANTE', 'APODERADO']
   },
   // {
   //   name: 'Mensajes',
@@ -45,8 +45,8 @@ export const NAV_CONFIG = [
   //   roles: ['ADMINISTRADOR'],
   // },
   {
-    name: 'Usuarios',
-    path: ROUTES.ROLE_MANAGEMENT,
+    name: 'Estudiantes',
+    path: ROUTES.STUDENT_MANAGEMENT,
     Icon: UsersIcon,
     roles: ['ADMINISTRADOR'],
   },
@@ -65,8 +65,7 @@ export const NAV_CONFIG = [
   {
     name: 'Cursos',
     path: ROUTES.COURSE,
-    Icon: BookOpenIcon,
-    roles: ['ADMINISTRADOR'],
+    Icon: BookOpenIcon
   },
   {
     name: 'Asistencias',
