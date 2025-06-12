@@ -1,132 +1,71 @@
-
-import { React, useState } from 'react';
-import { getAssistanceRecords } from "../api/assistance"
+import React from 'react';
 import useAuth from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import AssistanceFilterFetcher from "../components/assistance/AssistanceFilterFetcher"
+import EvaluationManager from '../components/EvaluationManager';
 
 const Dashboard = () => {
   const { user, person, logout } = useAuth();
-  const navigate = useNavigate();
-
-  // Cambio de página
-  const goToPage = (newPage) => {
-    handleSearch(null, newPage);
-  };
-
-  // Cambio de tamaño
-  const handleSizeChange = (e) => {
-    setSize(Number(e.target.value));
-    handleSearch(null, 0, Number(e.target.value));
-  };
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>
-        Bienvenido, {person ? `${person.firstName} ${person.lastName}` : "Información personal no disponible"}
-      </p>
-      <p>Username: {user.username}</p>
-      <p>Email: {user.email}</p>
+    <div className="min-h-screen bg-gray-100 flex">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-md flex flex-col">
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          <a href="#" className="block px-4 py-2 rounded hover:bg-blue-100 font-medium">Dashboard</a>
+          <a href="#" className="block px-4 py-2 rounded hover:bg-blue-100">Reportes</a>
+          <a href="#" className="block px-4 py-2 rounded hover:bg-blue-100">Asistencia</a>
+          {/* Más links aquí */}
+        </nav>
+      </aside>
 
-      <AssistanceFilterFetcher fetchFunction={getAssistanceRecords}>
-        {({ content, filters, loading, error, totalPages, onPageChange, totalElements }) => (
-          <>
-
-            <div className="overflow-x-auto rounded-lg border border-gray-200 shadow mb-4">
-              <table className="min-w-full bg-white">
-                <thead className="bg-blue-50">
-                  <tr>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Fecha</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Apellido</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Nombre</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Nivel</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Grado</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Sección</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Estado entrada</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Estado salida</th>
-                    <th className="px-3 py-2 text-center text-sm font-bold text-gray-700">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td colSpan={8} className="text-center py-8 text-gray-400">
-                        <span className="animate-spin inline-block mr-2">&#9696;</span>
-                        Cargando...
-                      </td>
-                    </tr>
-                  ) : content.length === 0 ? (
-                    <tr>
-                      <td colSpan={8} className="text-center py-8 text-gray-400">
-                        Sin resultados.
-                      </td>
-                    </tr>
-                  ) : (
-                    content.map(rec => (
-                      <tr key={rec.id} className="border-b last:border-b-0 hover:bg-blue-50/30">
-                        <td className="px-3 py-2 text-sm">{rec.date}</td>
-                        <td className="px-3 py-2 text-sm">{rec.lastName}</td>
-                        <td className="px-3 py-2 text-sm">{rec.firstName}</td>
-                        <td className="px-3 py-2 text-sm">{rec.schoolLevel || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.grade || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.section || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.entryStatus}</td>
-                        <td className="px-3 py-2 text-sm">{rec.exitStatus}</td>
-                        <td className="px-3 py-2 text-center">
-                          <button
-                            className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-xl shadow text-xs font-bold"
-                            onClick={() => handleEdit(rec)}
-                          >
-                            Editar
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="h-16 bg-white shadow flex items-center justify-between px-8">
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <div className="flex items-center space-x-4">
+            <div>
+              <p className="text-sm text-gray-600">
+                {person
+                  ? `${person.firstName} ${person.lastName}`
+                  : "Sin información personal"}
+              </p>
+              <p className="text-xs text-gray-400">{user.username}</p>
             </div>
+            <img
+              src={`https://ui-avatars.com/api/?name=${person ? `${person.firstName}+${person.lastName}` : user.username}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full bg-gray-200"
+            />
+          </div>
+        </header>
 
-            {/* Paginación */}
-            <div className="flex flex-wrap justify-center items-center mt-6 gap-2">
-              <button
-                onClick={() => onPageChange(filters.page - 1)}
-                disabled={filters.page === 0}
-                className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-              >
-                Anterior
-              </button>
-              {Array.from({ length: totalPages }).map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => onPageChange(idx)}
-                  className={`px-3 py-1 rounded-lg font-bold ${filters.page === idx
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 hover:bg-blue-50"
-                    }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => onPageChange(filters.page + 1)}
-                disabled={filters.page >= totalPages - 1}
-                className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-              >
-                Siguiente
-              </button>
-              <span className="text-sm ml-2 text-gray-500">
-                {totalElements} resultados
-              </span>
+        {/* Dashboard Content */}
+        <main className="flex-1 p-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded shadow p-6 flex flex-col items-start">
+              <span className="text-gray-500 text-sm">Asistencias</span>
+              <span className="text-2xl font-bold">123</span>
+              <span className="text-green-500 text-xs mt-2">+10 esta semana</span>
             </div>
-
-          </>
-
-        )}
-      </AssistanceFilterFetcher>
-
-
+            <div className="bg-white rounded shadow p-6 flex flex-col items-start">
+              <span className="text-gray-500 text-sm">Usuarios</span>
+              <span className="text-2xl font-bold">50</span>
+              <span className="text-blue-500 text-xs mt-2">+2 nuevos</span>
+            </div>
+            <div className="bg-white rounded shadow p-6 flex flex-col items-start">
+              <span className="text-gray-500 text-sm">Alertas</span>
+              <span className="text-2xl font-bold">5</span>
+              <span className="text-red-500 text-xs mt-2">1 crítica</span>
+            </div>
+          </div> */}
+          {/* Aquí puedes poner más componentes, gráficos, tablas, etc */}
+          <div className="bg-white rounded shadow p-6">
+            <h2 className="text-lg font-semibold mb-4">Resumen</h2>
+            <p className="text-gray-700">Maqueta de gráficos, reportes o cualquier otro contenido relevante.</p>
+            <img src="https://pinguinodigital.com/wp-content/uploads/2020/05/Qu%C3%A9-es-dashboard-2.png" alt="" />
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
