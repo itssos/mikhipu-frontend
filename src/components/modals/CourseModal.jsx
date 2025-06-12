@@ -107,7 +107,7 @@ export default function CourseModal({ trigger, course = null, onSuccess }) {
         },
       ]}
     >
-      <form className="space-y-4">
+      <form className="space-y-4" id="courseCreate">
         {/* Datos básicos del curso */}
         <div>
           <label className="block text-sm">Nombre</label>

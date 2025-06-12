@@ -178,7 +178,7 @@ export default function EvaluationManager() {
             name="courseId"
             value={form.courseId}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="w-full rounded-xl shadow px-2 test-course-evaluation-create py-1 border border-gray-200"
             required
           >
             <option value="">Selecciona...</option>
@@ -204,7 +204,7 @@ export default function EvaluationManager() {
             name="type"
             value={form.type}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="w-full rounded-xl shadow px-2 test-type-evaluation-create py-1 border border-gray-200"
             required
           >
             <option value="">Selecciona...</option>

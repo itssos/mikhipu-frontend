@@ -97,7 +97,7 @@ const TeacherModal = ({ trigger, teacherId }) => {
           { label: teacherId ? 'Actualizar' : 'Crear', onClick: handleSave, className: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' }
         ]}
       >
-        <div className="space-y-6">
+        <div className="space-y-6" id="test-teacher-modal">
           <div className="grid grid-cols-2 gap-4">
             <InputField label="Nombre" icon={<IdentificationIcon />} value={form.person.firstName} onChange={e => handleChange('person.firstName', e.target.value)} />
             <InputField label="Apellido" icon={<IdentificationIcon />} value={form.person.lastName} onChange={e => handleChange('person.lastName', e.target.value)} />
