@@ -20,6 +20,7 @@ import { ToastContainer } from 'react-toastify';
 import { ROUTES } from './constants/routes';
 import AssistancePage from './pages/AssistancePage';
 import BookPopper from './components/BookPopper';
+import AnimatedBookPhrase from './components/AnimatedBookPhrase';
 
 function App() {
   return (
@@ -115,6 +116,7 @@ function App() {
       </Router>
       <ToastContainer />
       <BookPopper />
+      <AnimatedBookPhrase />
     </AuthProvider>
   );
 }

@@ -6,7 +6,6 @@
 @tailwind components;
 @tailwind utilities;*/
 
-
 .book-gif-container {
   position: fixed;
   right: 30px;
@@ -373,6 +372,10 @@ html {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+* {
+  cursor: url('/cursor.png'), auto !important;
 }
 
 /* Ajuste para dispositivos muy pequeños (≤ 350px de ancho) */
