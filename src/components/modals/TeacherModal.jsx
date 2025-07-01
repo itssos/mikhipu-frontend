@@ -1,9 +1,8 @@
-// src/components/TeacherModal.jsx
 import React, { useState, useEffect } from 'react';
 import Modal from '../UI/Modal';
 import { createTeacher, updateTeacher, getTeacherById } from '../../api/teachers';
 import { getRoles } from '../../api/roles';
-import { toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import {
   IdentificationIcon,
   CalendarIcon,
@@ -93,19 +92,19 @@ const TeacherModal = ({ trigger, teacherId }) => {
         title={teacherId ? 'Editar Docente' : 'Crear Docente'}
         size="xl"
         actions={[
-          { label: 'Cancelar', onClick: close, className: 'bg-gray-200 text-gray-700 px-4 py-2 rounded' },
-          { label: teacherId ? 'Actualizar' : 'Crear', onClick: handleSave, className: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' }
+          { label: 'Cancelar', onClick: close, className: 'btn-adventure-secondary' },
+          { label: teacherId ? 'Actualizar' : 'Crear', onClick: handleSave, className: 'btn-adventure' }
         ]}
       >
-        <div className="space-y-6" id="test-teacher-modal">
+        <div className="adventure-panel-modal">
           <div className="grid grid-cols-2 gap-4">
             <InputField label="Nombre" icon={<IdentificationIcon />} value={form.person.firstName} onChange={e => handleChange('person.firstName', e.target.value)} />
             <InputField label="Apellido" icon={<IdentificationIcon />} value={form.person.lastName} onChange={e => handleChange('person.lastName', e.target.value)} />
             <InputField label="DNI" icon={<IdentificationIcon />} value={form.person.dni} onChange={e => handleChange('person.dni', e.target.value)} />
             <InputField label="Fecha Nac." type="date" icon={<CalendarIcon />} value={form.person.birthDate} onChange={e => handleChange('person.birthDate', e.target.value)} />
             <div>
-              <label className="flex items-center space-x-2 mb-1"><UserGroupIcon className="w-5 h-5 text-gray-500" /><span>Género</span></label>
-              <select className="w-full border p-2 rounded" value={form.person.gender} onChange={e => handleChange('person.gender', e.target.value)}>
+              <label className="adventure-label"><UserGroupIcon className="w-5 h-5 text-gray-500" /><span>Género</span></label>
+              <select className="adventure-input" value={form.person.gender} onChange={e => handleChange('person.gender', e.target.value)}>
                 <option value="MASCULINO">Masculino</option>
                 <option value="FEMENINO">Femenino</option>
               </select>
@@ -119,8 +118,8 @@ const TeacherModal = ({ trigger, teacherId }) => {
               <InputField label="Contraseña" type="password" icon={<PencilIcon />} value={form.person.user.password} onChange={e => handleChange('person.user.password', e.target.value)} />
             )}
             <div>
-              <label className="flex items-center space-x-2 mb-1"><UserGroupIcon className="w-5 h-5 text-gray-500" /><span>Rol</span></label>
-              <select className="w-full border p-2 rounded" value={form.person.user.role} onChange={e => handleChange('person.user.role', e.target.value)}>
+              <label className="adventure-label"><UserGroupIcon className="w-5 h-5 text-gray-500" /><span>Rol</span></label>
+              <select className="adventure-input" value={form.person.user.role} onChange={e => handleChange('person.user.role', e.target.value)}>
                 <option value="">-- Seleccione --</option>
                 {roles.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
               </select>
@@ -129,6 +128,40 @@ const TeacherModal = ({ trigger, teacherId }) => {
           </div>
           <InputField label="Código Docente" icon={<IdentificationIcon />} value={form.code} onChange={e => handleChange('code', e.target.value)} />
         </div>
+        <style>{`
+          .adventure-panel-modal {
+            background: #fffbe6;
+            border-radius: 20px;
+            border: 1.5px solid #ebcb88;
+            box-shadow: 0 2px 14px #e6cf9340;
+            padding: 28px 20px;
+            margin-top: 7px;
+          }
+          .adventure-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.2px solid #e2c980;
+            border-radius: 10px;
+            background: #fffcf2;
+            font-size: 15px;
+            color: #7d611d;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+          }
+          .adventure-input:focus {
+            border-color: #d6ab41;
+            box-shadow: 0 0 0 2px #ffe9b1;
+          }
+          .adventure-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #9c7c1d;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+          }
+        `}</style>
       </Modal>
     </>
   );
@@ -136,12 +169,12 @@ const TeacherModal = ({ trigger, teacherId }) => {
 
 const InputField = ({ label, value, onChange, icon, type = 'text' }) => (
   <div>
-    <label className="flex items-center space-x-2 mb-1 h-8 w-8">{icon}<span>{label}</span></label>
+    <label className="adventure-label"><small>{icon}</small><span>{label}</span></label>
     <input
       type={type}
       value={value}
       onChange={onChange}
-      className="w-full border p-2 rounded"
+      className="adventure-input"
     />
   </div>
 );

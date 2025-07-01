@@ -400,9 +400,9 @@ export default function ScoreManager() {
 
   // --- UI ---
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white/90 rounded-2xl shadow-xl mt-8">
+    <div className="max-w-5xl mx-auto p-6 bg-white/90 rounded-2xl shadow-xl mt-8 panel-adventure">
       <ToastContainer position="top-right" autoClose={1700} hideProgressBar />
-      <h2 className="text-2xl font-bold mb-6">Gestión de Calificaciones</h2>
+      <h2 className="adventure-title">Gestión de Calificaciones</h2>
 
       {/* REGISTRAR NOTA */}
       {(canRegister && isDocente) && (
@@ -499,94 +499,215 @@ export default function ScoreManager() {
 
       {/* PROMEDIO */}
       {canAverage && (
-        <section className="mb-8 bg-green-50 rounded-xl p-4 shadow space-y-3">
-          <h3 className="font-semibold text-green-900">Consultar Promedio Ponderado</h3>
-          <form className="flex gap-4 flex-wrap items-end" onSubmit={handleGetAverage}>
-            <StudentSelectByName
-              students={students}
-              value={averageForm.studentId}
-              onChange={e => setAverageForm(f => ({ ...f, studentId: e.target.value }))}
-            />
+        <section
+          className="panel-adventure mb-10"
+          style={{
+            marginBottom: 36,
+            minHeight: 0,
+            fontFamily: "'Pirata One', cursive, serif",
+            borderRadius: 22,
+            border: "5px solid #487746",
+            boxShadow: "0 4px 22px #48774638",
+            background: "#e8f5d2 url('https://www.transparenttextures.com/patterns/wood-pattern.png')",
+            padding: "32px 22px 22px 22px",
+            color: "#25412a",
+            position: "relative",
+          }}
+        >
+          <h3
+            style={{
+              fontSize: 27,
+              letterSpacing: 1.5,
+              color: "#34703a",
+              textShadow: "1.5px 2px #fffbe6, 0 2px #ad9c62",
+              marginBottom: 16,
+            }}
+          >
+            🧮 Consultar Promedio Ponderado
+          </h3>
+          <form
+            className="flex gap-4 flex-wrap items-end"
+            style={{ marginBottom: 8 }}
+            onSubmit={handleGetAverage}
+          >
             <div>
-              <label className="block text-xs">Curso</label>
+              {/* Usa el mismo estilo para tu StudentSelectByName si puedes! */}
+              <StudentSelectByName
+                students={students}
+                value={averageForm.studentId}
+                onChange={e =>
+                  setAverageForm(f => ({ ...f, studentId: e.target.value }))
+                }
+                className="adventure-select"
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 13, color: "#527c48" }}>Curso</label>
               <select
                 value={averageForm.courseId}
-                onChange={e => setAverageForm(f => ({ ...f, courseId: e.target.value }))}
-                className="rounded-lg border p-2"
+                onChange={e =>
+                  setAverageForm(f => ({ ...f, courseId: e.target.value }))
+                }
+                className="adventure-select"
                 required
               >
                 <option value="">Seleccione...</option>
                 {courses.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs">Trimestre</label>
+              <label style={{ fontSize: 13, color: "#527c48" }}>Trimestre</label>
               <select
                 value={averageForm.quarter}
-                onChange={e => setAverageForm(f => ({ ...f, quarter: e.target.value }))}
-                className="rounded-lg border p-2"
+                onChange={e =>
+                  setAverageForm(f => ({ ...f, quarter: e.target.value }))
+                }
+                className="adventure-select"
               >
                 <option value="">Todos</option>
                 {QUARTERS.map(q => (
-                  <option key={q.value} value={q.value}>{q.label}</option>
+                  <option key={q.value} value={q.value}>
+                    {q.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs">Año</label>
+              <label style={{ fontSize: 13, color: "#527c48" }}>Año</label>
               <input
                 type="number"
                 placeholder="Año"
                 value={averageForm.year}
-                onChange={e => setAverageForm(f => ({ ...f, year: e.target.value }))}
-                className="rounded-lg border p-2 w-24"
+                onChange={e =>
+                  setAverageForm(f => ({ ...f, year: e.target.value }))
+                }
+                className="adventure-select"
+                style={{ width: 72 }}
               />
             </div>
             <button
               type="submit"
-              className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
+              className="btn-adventure"
+              style={{
+                background: "linear-gradient(120deg, #7dde9d 60%, #39a857 100%)",
+                color: "white",
+                border: "3px solid #329047",
+                fontFamily: "'Pirata One', cursive",
+                fontSize: 17,
+                padding: "9px 17px",
+                borderRadius: 11,
+                marginLeft: 10,
+                boxShadow: "0 1.5px 6px #32904715",
+                transition: "all 0.14s",
+              }}
               disabled={loading}
             >
               Consultar
             </button>
           </form>
-          {average !== null &&
-            <div className="font-bold text-lg mt-2 text-green-800">
-              Promedio: {average}
+          {average !== null && (
+            <div
+              className="font-bold text-xl mt-2"
+              style={{
+                color: "#2a7437",
+                background:
+                  "linear-gradient(90deg, #c8f6be 60%, #e3ffe7 100%)",
+                padding: "14px 22px",
+                borderRadius: 13,
+                border: "2.5px solid #4fa94c",
+                boxShadow: "0 3px 9px #b7eeac31",
+                fontFamily: "'Press Start 2P', 'Pirata One', cursive",
+                letterSpacing: 1,
+              }}
+            >
+              <span role="img" aria-label="medalla">
+                🏅
+              </span>{" "}
+              Promedio: <span style={{ fontSize: 22 }}>{average}</span>
             </div>
-          }
+          )}
         </section>
       )}
 
+
       {/* MIS NOTAS */}
       {(canSelf && isEstudiante) && (
-        <section className="mb-8 bg-purple-50 rounded-xl p-4 shadow space-y-3">
-          <div className='flex justify-between flex-col md:flex-row'>
-            <h3 className="font-semibold text-purple-900">Mis Notas</h3>
-            <div className="flex gap-2 mb-2">
+        <section
+          className="panel-adventure mb-10"
+          style={{
+            marginBottom: 36,
+            fontFamily: "'Pirata One', cursive, serif",
+            minHeight: 0,
+            borderRadius: 22,
+            border: "5px solid #715f3a",
+            boxShadow: "0 4px 22px #614e2a38",
+            background: "#ede2c3 url('https://www.transparenttextures.com/patterns/wood-pattern.png')",
+            padding: "36px 22px 28px 22px",
+            color: "#3d3219",
+            position: "relative",
+          }}
+        >
+          <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
+            <h3
+              style={{
+                fontSize: 28,
+                letterSpacing: 1.5,
+                color: "#604d18",
+                textShadow: "1.5px 2px #fffbe6, 0 2px #ad9c62",
+              }}
+            >
+              📜 Mis Notas
+            </h3>
+            <div className="flex gap-2">
               <button
                 onClick={handleDownloadMyScoresPDF}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="btn-adventure danger"
+                style={{
+                  background: "linear-gradient(120deg, #ff7e6e 60%, #a13a28 100%)",
+                  color: "white",
+                  border: "3px solid #a13a28",
+                  fontFamily: "'Pirata One', cursive",
+                  fontSize: 17,
+                  padding: "9px 17px",
+                  borderRadius: 11,
+                  marginRight: 2,
+                  boxShadow: "0 1.5px 6px #a13a2815",
+                  transition: "all 0.14s"
+                }}
               >
-                Descargar PDF
+                📄 Descargar PDF
               </button>
               <button
                 onClick={handleDownloadMyScoresExcel}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="btn-adventure"
+                style={{
+                  background: "linear-gradient(120deg, #70bb7a 60%, #399b4b 100%)",
+                  color: "white",
+                  border: "3px solid #2e8241",
+                  fontFamily: "'Pirata One', cursive",
+                  fontSize: 17,
+                  padding: "9px 17px",
+                  borderRadius: 11,
+                  boxShadow: "0 1.5px 6px #399b4b15",
+                  transition: "all 0.14s"
+                }}
               >
-                Descargar Excel
+                📊 Descargar Excel
               </button>
             </div>
           </div>
-          <div className="flex gap-3 mb-2">
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-4 mb-3 items-end">
             <div>
-              <label className="block text-xs">Curso</label>
+              <label style={{ fontSize: 13, color: "#997e5c" }}>Curso</label>
               <select
                 value={filter.courseId}
                 onChange={e => setFilter(f => ({ ...f, courseId: e.target.value }))}
-                className="rounded-lg border p-2"
+                className="adventure-select"
               >
                 <option value="">Todos</option>
                 {courses.map(c => (
@@ -595,11 +716,11 @@ export default function ScoreManager() {
               </select>
             </div>
             <div>
-              <label className="block text-xs">Trimestre</label>
+              <label style={{ fontSize: 13, color: "#997e5c" }}>Trimestre</label>
               <select
                 value={filter.quarter}
                 onChange={e => setFilter(f => ({ ...f, quarter: e.target.value }))}
-                className="rounded-lg border p-2"
+                className="adventure-select"
               >
                 <option value="">Todos</option>
                 {QUARTERS.map(q => (
@@ -608,27 +729,54 @@ export default function ScoreManager() {
               </select>
             </div>
             <div>
-              <label className="block text-xs">Año</label>
+              <label style={{ fontSize: 13, color: "#997e5c" }}>Año</label>
               <input
                 type="number"
                 placeholder="Año"
                 value={filter.year}
                 onChange={e => setFilter(f => ({ ...f, year: e.target.value }))}
-                className="rounded-lg border p-2 w-24"
+                className="adventure-select"
+                style={{ width: 72 }}
               />
             </div>
             <button
               onClick={handleGetMyScores}
-              className="bg-purple-700 text-white px-4 py-2 rounded-xl hover:bg-purple-800"
+              className="btn-adventure"
+              style={{
+                background: "linear-gradient(120deg, #8b72ce 60%, #553591 100%)",
+                color: "white",
+                border: "3px solid #5e4696",
+                fontFamily: "'Pirata One', cursive",
+                fontSize: 17,
+                padding: "9px 17px",
+                borderRadius: 11,
+                marginLeft: 10,
+                boxShadow: "0 1.5px 6px #5e469615",
+                transition: "all 0.14s"
+              }}
               disabled={loading}
             >
               Consultar
             </button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left bg-white rounded-xl shadow">
+          {/* Tabla */}
+          <div className="overflow-x-auto rounded-2xl shadow mt-3">
+            <table
+              className="adventure-table"
+              style={{
+                width: "100%",
+                fontSize: 15,
+                fontFamily: "'Pirata One', cursive",
+                background: "#fffbe6",
+                borderRadius: 16,
+                overflow: "hidden",
+              }}
+            >
               <thead>
-                <tr className="bg-purple-100">
+                <tr style={{
+                  background: "linear-gradient(90deg, #e5d0ff 60%, #c9b6f5 100%)",
+                  color: "#462669"
+                }}>
                   <th className="p-2">Curso</th>
                   <th className="p-2">Evaluación</th>
                   <th className="p-2">Nota</th>
@@ -637,7 +785,7 @@ export default function ScoreManager() {
               </thead>
               <tbody>
                 {myScores.map(s => (
-                  <tr key={s.id}>
+                  <tr key={s.id} style={{ borderBottom: "1.5px solid #e7dac2" }}>
                     <td className="p-2">{s.courseName ?? s.course?.name}</td>
                     <td className="p-2">{s.evaluationName ?? s.evaluation?.name}</td>
                     <td className="p-2">{s.value}</td>
@@ -647,6 +795,56 @@ export default function ScoreManager() {
               </tbody>
             </table>
           </div>
+          <style>{`
+          .btn-adventure {
+  background: linear-gradient(120deg, #dac382 60%, #95702a 100%);
+  border: 3px solid #604d18;
+  border-radius: 13px 20px 13px 13px;
+  font-family: 'Pirata One', cursive;
+  font-size: 17px;
+  color: #3c2d0e;
+  cursor: pointer;
+  padding: 9px 16px;
+  box-shadow: 2px 4px #b9a97e, 1px 1px 5px #4e3d10bb;
+  margin-right: 6px;
+  margin-bottom: 2px;
+  text-shadow: 1px 1px #fff7ad;
+  outline: none;
+  transition: all 0.13s;
+}
+.btn-adventure:hover {
+  background: #ffecc5 !important;
+  color: #a2782d !important;
+  transform: scale(1.05);
+}
+.btn-adventure:active {
+  background: #a38a47 !important;
+  color: #fff5b6 !important;
+}
+
+.adventure-select {
+  border-radius: 10px;
+  border: 2px solid #ad9c62;
+  background: #f6ecd1;
+  font-family: 'Pirata One', cursive;
+  font-size: 16px;
+  color: #5c430f;
+  padding: 8px 12px;
+  margin-right: 3px;
+  outline: none;
+  box-shadow: 1.5px 2.5px #ccb97b;
+  transition: border 0.12s;
+}
+.adventure-select:focus {
+  border: 2.5px solid #604d18;
+  background: #fffbe6;
+}
+.adventure-table th, .adventure-table td {
+  padding: 10px 8px;
+  border-bottom: 1.3px solid #e2d3b3;
+}
+
+          `}</style>
         </section>
       )}
 
@@ -750,41 +948,147 @@ export default function ScoreManager() {
         </section>
       )}
 
-      {/* HISTORIAL - SOLO ADMINISTRADOR O DOCENTE */}
       {isAdminOrTeacher && (
-        <section className="mb-8 bg-gray-50 rounded-xl p-4 shadow space-y-3">
-          <div className='flex justify-between flex-col md:flex-row'>
-            <h3 className="font-semibold text-gray-900">Historial de Notas</h3>
+        <section className="adventure-panel adventure-history mb-10">
+          <style>{`
+      .adventure-panel.adventure-history {
+        background: #f7f1e2 url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+        border: 7px solid #574d32;
+        border-radius: 26px 26px 35px 35px;
+        box-shadow: 0 0 22px #000a;
+        font-family: 'Pirata One', cursive, monospace;
+        padding: 28px 28px 22px 28px;
+      }
+      .adventure-panel .adventure-title {
+        font-size: 1.45rem;
+        color: #6c5222;
+        text-shadow: 1px 2px #fff6d2, 1px 5px 10px #b6a07744;
+        margin-bottom: 0.3rem;
+        font-family: 'Pirata One', cursive;
+      }
+      .adventure-panel .adventure-btn {
+        font-family: 'Pirata One', cursive;
+        font-size: 1.06rem;
+        border-radius: 14px;
+        border: 2.2px solid #ae9457;
+        background: linear-gradient(120deg, #dac382 60%, #95702a 100%);
+        color: #433212;
+        padding: 8px 22px;
+        margin-right: 5px;
+        margin-bottom: 3px;
+        box-shadow: 2px 2px 0 #cbb990, 2px 7px 15px #b3933266;
+        transition: background 0.11s, color 0.11s, transform 0.10s;
+        outline: none;
+      }
+      .adventure-panel .adventure-btn:active {
+        background: #95702a;
+        color: #fff7cd;
+        transform: scale(.97);
+      }
+      .adventure-panel .adventure-btn.red {
+        background: linear-gradient(120deg, #e54e3e 50%, #d42a2a 100%);
+        color: #fff6e8;
+        border: 2px solid #b72b1a;
+        box-shadow: 2px 2px 0 #cbb990, 2px 7px 15px #cc656666;
+      }
+      .adventure-panel .adventure-btn.red:active {
+        background: #a52c1c;
+        color: #fff9ef;
+      }
+      .adventure-panel .adventure-btn.green {
+        background: linear-gradient(120deg, #57d651 50%, #20901c 100%);
+        color: #fff;
+        border: 2px solid #1e7622;
+      }
+      .adventure-panel .adventure-btn.green:active {
+        background: #125d1a;
+        color: #fff;
+      }
+      .adventure-panel .adventure-table {
+        width: 100%;
+        font-family: 'Pirata One', cursive;
+        background: #fffbe9;
+        border-radius: 15px;
+        box-shadow: 0 2px 18px #c8ad7944;
+        overflow: hidden;
+        margin-top: 18px;
+      }
+      .adventure-panel .adventure-table th {
+        background: #e2cfa0;
+        color: #6b4e22;
+        padding: 11px 7px;
+        font-size: 1.01rem;
+        font-weight: bold;
+      }
+      .adventure-panel .adventure-table td {
+        background: #fffdfa;
+        color: #4b3921;
+        padding: 10px 7px;
+        font-size: .98rem;
+      }
+      .adventure-panel .adventure-table tr:nth-child(even) td {
+        background: #f6eedc;
+      }
+      .adventure-panel .adventure-filter-select, 
+      .adventure-panel .adventure-filter-input {
+        font-family: 'Pirata One', cursive;
+        font-size: 1.01rem;
+        border-radius: 10px 16px 10px 14px;
+        padding: 7px 13px;
+        border: 2px solid #bca66a;
+        background: #fffbe9;
+        margin-bottom: 2px;
+        outline: none;
+        min-width: 80px;
+        margin-right: 10px;
+      }
+      .adventure-panel .adventure-filter-select:focus,
+      .adventure-panel .adventure-filter-input:focus {
+        border-color: #a88c42;
+        background: #fff9cf;
+      }
+      .adventure-panel .adventure-filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px 20px;
+        align-items: end;
+        margin-bottom: 12px;
+      }
+      @media (max-width: 720px) {
+        .adventure-panel .adventure-filter-row { flex-direction: column; gap: 10px; }
+      }
+    `}</style>
+          <div className='flex-col justify-between flex-col md:flex-row mb-2'>
+            <h3 className="adventure-title">Historial de Notas</h3>
             <div className="flex gap-2 mb-2">
               <button
                 onClick={handleDownloadPDF}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="adventure-btn red"
               >
                 Descargar PDF
               </button>
               <button
                 onClick={handleDownloadExcel}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="adventure-btn green"
               >
                 Descargar Excel
               </button>
             </div>
           </div>
 
-          <div className="flex gap-3 items-center">
-
+          <div className="adventure-filter-row">
             <StudentSelectByName
               students={students}
               value={filter.studentId}
               onChange={e => setFilter(f => ({ ...f, studentId: e.target.value }))}
+              className="adventure-filter-select"
             />
-
             <div>
-              <label className="block text-xs">Curso</label>
+              <label className="block text-xs adventure-filter-label mb-1">Curso</label>
               <select
                 value={filter.courseId}
                 onChange={e => setFilter(f => ({ ...f, courseId: e.target.value }))}
-                className="rounded-lg border p-2"
+                className="adventure-filter-select"
               >
                 <option value="">Todos</option>
                 {courses.map(c => (
@@ -793,11 +1097,11 @@ export default function ScoreManager() {
               </select>
             </div>
             <div>
-              <label className="block text-xs">Trimestre</label>
+              <label className="block text-xs adventure-filter-label mb-1">Trimestre</label>
               <select
                 value={filter.quarter}
                 onChange={e => setFilter(f => ({ ...f, quarter: e.target.value }))}
-                className="rounded-lg border p-2"
+                className="adventure-filter-select"
               >
                 <option value="">Todos</option>
                 {QUARTERS.map(q => (
@@ -806,47 +1110,47 @@ export default function ScoreManager() {
               </select>
             </div>
             <div>
-              <label className="block text-xs">Año</label>
+              <label className="block text-xs adventure-filter-label mb-1">Año</label>
               <input
                 type="number"
                 placeholder="Año"
                 value={filter.year}
                 onChange={e => setFilter(f => ({ ...f, year: e.target.value }))}
-                className="rounded-lg border p-2 w-24"
+                className="adventure-filter-input w-24"
               />
             </div>
             <button
               onClick={handleGetHistoryScores}
-              className="bg-gray-600 text-white px-4 h-10 rounded-xl hover:bg-gray-700 self-end"
+              className="adventure-btn"
+              style={{ minWidth: 110 }}
               disabled={loading}
             >
               Consultar
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm bg-white rounded-xl shadow">
+            <table className="adventure-table">
               <thead>
-                <tr className="bg-gray-100 text-left">
-                  <th className="p-2">Estudiante</th>
-                  <th className="p-2">Curso</th>
-                  <th className="p-2">Evaluación</th>
-                  <th className="p-2">Nota</th>
-                  <th className="p-2">Fecha</th>
+                <tr>
+                  <th>Estudiante</th>
+                  <th>Curso</th>
+                  <th>Evaluación</th>
+                  <th>Nota</th>
+                  <th>Fecha</th>
                 </tr>
               </thead>
               <tbody>
                 {historyScores?.content?.map(s => (
                   <tr key={s.id}>
-                    <td className="p-2">{s.studentFullName}</td>
-                    <td className="p-2">{s.courseName}</td>
-                    <td className="p-2">{s.evaluationName ?? s.evaluation?.name}</td>
-                    <td className="p-2">{s.value}</td>
-                    <td className="p-2">{new Date(s.createdAt).toLocaleString()}</td>
+                    <td>{s.studentFullName}</td>
+                    <td>{s.courseName}</td>
+                    <td>{s.evaluationName ?? s.evaluation?.name}</td>
+                    <td>{s.value}</td>
+                    <td>{new Date(s.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
             <Pagination
               page={historyScores.number}
               totalPages={historyScores.totalPages}
@@ -855,10 +1159,10 @@ export default function ScoreManager() {
               sizeOptions={[20, 50, 100, 500]}
               onChangeSize={handleChangePageSize}
             />
-
           </div>
         </section>
       )}
+
     </div>
   );
 }

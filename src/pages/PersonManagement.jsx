@@ -43,8 +43,8 @@ export default function PersonManagement() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-8">
-      <h1 className="text-3xl font-extrabold mb-6 text-center tracking-tight">
+    <div className=" max-w-7xl mx-auto px-2 sm:px-4 py-8">
+      <h1 className="adventure-title text-3xl font-extrabold mb-6 text-center tracking-tight">
         Administración de Estudiantes
       </h1>
 
@@ -102,13 +102,13 @@ export default function PersonManagement() {
         }) => (
           <>
             {error && <div className="text-red-500 mb-4 text-center font-semibold animate-pulse">{error}</div>}
-            <div className="w-full overflow-x-auto rounded-2xl shadow-xl bg-white/90">
+            <div className="w-full overflow-x-auto rounded-2xl shadow-xl ">
               {loading ? (
                 <div className="text-center py-12 text-lg animate-pulse">Cargando estudiantes...</div>
               ) : students.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">No hay estudiantes para mostrar.</div>
               ) : (
-                <table className="w-full border-separate border-spacing-y-2">
+                <table className="w-full table-adventure" style={{marginBottom: 0}}>
                   <thead>
                     <tr className="bg-gray-50 text-gray-600 text-sm uppercase tracking-wider">
                       <th className="py-3 px-2 text-left rounded-tl-2xl">ID</th>
@@ -124,7 +124,7 @@ export default function PersonManagement() {
                     {students.map((person) => (
                       <tr
                         key={person.id}
-                        className="text-gray-800 bg-white hover:bg-gray-50 transition-colors border-b"
+                        className="text-gray-800 transition-colors border-b"
                       >
                         <td className="py-2 px-2">{person.id}</td>
                         <td className="py-2 px-2 font-medium">{person.fullName}</td>

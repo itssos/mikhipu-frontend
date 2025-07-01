@@ -117,17 +117,17 @@ const RoleCrudModal = ({ trigger }) => {
           {
             label: "Cancelar",
             onClick: resetForm,
-            className: "bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+            className: "btn-adventure-secondary"
           },
           {
             label: editingId ? "Actualizar" : "Crear",
             onClick: handleSaveRole,
-            className: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className: "btn-adventure"
           }
         ]}
       >
         {/* Formulario de rol */}
-        <div className="mb-4 grid grid-cols-2 gap-4">
+        <div className="adventure-form mb-4 grid grid-cols-2 gap-4">
           <input
             type="text"
             placeholder="Nombre del rol"
@@ -135,7 +135,7 @@ const RoleCrudModal = ({ trigger }) => {
             onChange={e =>
               setRoleForm({ ...roleForm, name: e.target.value })
             }
-            className="border p-2 rounded"
+            className="adventure-input"
           />
           <input
             type="text"
@@ -144,25 +144,26 @@ const RoleCrudModal = ({ trigger }) => {
             onChange={e =>
               setRoleForm({ ...roleForm, description: e.target.value })
             }
-            className="border p-2 rounded"
+            className="adventure-input"
           />
         </div>
 
         {/* Gestión de permisos (solo en edición) */}
         {editingRole && (
           <div className="mb-6">
-            <h4 className="font-semibold mb-2">Permisos disponibles</h4>
-            <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+            <h4 className="adventure-label mb-2">Permisos disponibles</h4>
+            <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto adventure-scroll">
               {allPermissions.map(p => {
                 const checked = editingRole.permissions?.some(
                   rp => rp.name === p.name
                 );
                 return (
-                  <label key={p.name} className="flex items-center space-x-2">
+                  <label key={p.name} className="flex items-center space-x-2 adventure-checkbox-label">
                     <input
                       type="checkbox"
                       checked={!!checked}
                       onChange={() => togglePermission(p.name)}
+                      className="adventure-checkbox"
                     />
                     <span>{p.label}</span>
                   </label>
@@ -173,32 +174,133 @@ const RoleCrudModal = ({ trigger }) => {
         )}
 
         {/* Lista de roles */}
-        <div className="space-y-3 max-h-60 overflow-y-auto">
+        <div className="adventure-panel space-y-2 max-h-60 overflow-y-auto adventure-scroll">
           {roles.map(role => (
             <div
               key={role.id}
-              className="flex justify-between items-center border-b pb-2 px-1"
+              className="flex justify-between items-center adventure-role-row"
             >
               <div>
-                <p className="font-semibold">{role.name}</p>
-                <p className="text-sm text-gray-600">{role.description}</p>
+                <p className="font-semibold text-yellow-900">{role.name}</p>
+                <p className="text-xs text-yellow-800 italic">{role.description}</p>
               </div>
               <div className="flex space-x-2">
                 <EditButton
-                  className="w-8 h-8 p-1"
+                  className="btn-adventure-mini"
                   onClick={() => handleEdit(role)}
                 />
                 <DeleteButton
-                  className="w-8 h-8 p-1"
+                  className="btn-adventure-mini bg-red-100 hover:bg-red-200 text-red-800"
                   onClick={() => handleDelete(role.id)}
                 />
               </div>
             </div>
           ))}
         </div>
+        <style>{`
+        .adventure-form {
+          font-family: 'Georgia', serif;
+        }
+        .adventure-panel {
+          background: #fffbe8;
+          border: 1.6px solid #ecd18c;
+          border-radius: 15px;
+          padding: 13px 14px;
+          box-shadow: 0 2px 10px #eddec4aa;
+        }
+        .adventure-input {
+          background: #fff9ed;
+          border: 1.4px solid #e6d2a5;
+          border-radius: 12px;
+          font-family: 'Georgia', serif;
+          padding: 9px 12px;
+          font-size: 1em;
+          color: #95702a;
+          box-shadow: 0 1px 3px #edd7b444;
+          transition: border 0.13s;
+        }
+        .adventure-input:focus {
+          outline: none;
+          border: 1.7px solid #b89325;
+          background: #fff6d8;
+        }
+        .adventure-label {
+          color: #b89325;
+          font-weight: bold;
+          font-family: 'Georgia', serif;
+          font-size: 1.07em;
+        }
+        .adventure-role-row {
+          border-bottom: 1px dashed #f6e3b2;
+          padding-bottom: 7px;
+          margin-bottom: 2px;
+          padding-top: 7px;
+        }
+        .adventure-checkbox-label {
+          font-family: 'Georgia', serif;
+          color: #705413;
+        }
+        .adventure-checkbox {
+          width: 17px;
+          height: 17px;
+          accent-color: #bfa44c;
+          border-radius: 5px;
+        }
+        .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+          font-family: 'Georgia', serif;
+          border-radius: 10px;
+          font-weight: bold;
+          transition: background .16s, color .16s;
+        }
+        .btn-adventure {
+          background: linear-gradient(90deg, #ecd18c 10%, #c6a258 90%);
+          color: #604a14;
+          border: none;
+          padding: 9px 20px;
+          font-size: 1rem;
+          box-shadow: 0 2px 9px #ecd99a44;
+        }
+        .btn-adventure:hover {
+          background: linear-gradient(90deg, #ffe7b4 10%, #b89325 90%);
+          color: #7d640c;
+        }
+        .btn-adventure-secondary {
+          background: #f9f6ed;
+          color: #8c7a4c;
+          border: 1.2px solid #d5be80;
+          padding: 9px 19px;
+          font-size: 1rem;
+        }
+        .btn-adventure-secondary:hover {
+          background: #f0e5c5;
+          color: #b39334;
+        }
+        .btn-adventure-mini {
+          background: #f3e2c0;
+          color: #95702a;
+          border: 1.1px solid #e1c98a;
+          padding: 5px 13px;
+          font-size: 0.94em;
+          margin: 0 1px;
+        }
+        .adventure-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #e9c96c #faf7f2;
+        }
+        .adventure-scroll::-webkit-scrollbar {
+          width: 8px;
+          background: #faf7f2;
+          border-radius: 7px;
+        }
+        .adventure-scroll::-webkit-scrollbar-thumb {
+          background: #ecd18c;
+          border-radius: 7px;
+        }
+      `}</style>
       </Modal>
     </>
   );
+
 };
 
 export default RoleCrudModal;

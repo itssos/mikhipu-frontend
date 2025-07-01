@@ -27,9 +27,64 @@ export default function StudentFilters({ filters, onChange, onClear }) {
   }, []);
 
   return (
-    <div className="w-full bg-gradient-to-tr from-blue-50 via-white to-gray-50 border border-blue-100 shadow-2xl rounded-2xl p-6 mb-6 flex flex-wrap gap-4 items-end">
+    <div className="student-filters-root w-full mb-7">
+      <style>{`
+      .student-filters-root {
+        background: linear-gradient(110deg, #f6faff 60%, #fff9e6 100%);
+        border: 2.5px solid #c3dbf7;
+        box-shadow: 0 2px 22px #a1b6d866, 0 1px 3px #e2e8f0;
+        border-radius: 22px;
+        padding: 2.3rem 2rem 1.5rem 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.3rem;
+        align-items: end;
+      }
+      .student-filters-root label {
+        font-size: 0.91rem;
+        color: #174ea3;
+        font-weight: 700;
+        margin-bottom: 5px;
+        letter-spacing: 0.2px;
+      }
+      .student-filters-root .input-filter {
+        border-radius: 11px;
+        background: #fff;
+        border: 1.7px solid #b8c8ee;
+        padding: 9px 13px;
+        box-shadow: 0 2px 7px #eef2f6cc;
+        font-size: 1.06rem;
+        color: #22335e;
+        transition: border-color 0.16s, box-shadow 0.13s;
+        outline: none;
+      }
+      .student-filters-root .input-filter:focus {
+        border-color: #2563eb;
+        box-shadow: 0 2px 7px #b9cdf9;
+        background: #f0f6ff;
+      }
+      .student-filters-root button {
+        border-radius: 13px;
+        border: 1.3px solid #e4e8ec;
+        background: linear-gradient(93deg, #fff 60%, #f8fafc 100%);
+        font-weight: 700;
+        color: #475569;
+        box-shadow: 0 2px 7px #d2dae7bb;
+        padding: 10px 24px;
+        font-size: 1.07rem;
+        transition: background 0.12s, color 0.09s, box-shadow 0.09s;
+      }
+      .student-filters-root button:hover {
+        background: #f1f5fa;
+        color: #1e293b;
+        box-shadow: 0 4px 14px #bcd0ec40;
+      }
+      @media (max-width: 900px) {
+        .student-filters-root { padding: 1.3rem 0.7rem 1rem 0.7rem; gap: 0.6rem;}
+      }
+    `}</style>
       <div className="flex flex-col w-32">
-        <label className="text-xs text-blue-800 mb-1">DNI</label>
+        <label>DNI</label>
         <input
           type="text"
           name="dni"
@@ -40,7 +95,7 @@ export default function StudentFilters({ filters, onChange, onClear }) {
         />
       </div>
       <div className="flex flex-col w-40">
-        <label className="text-xs text-blue-800 mb-1">Nombre</label>
+        <label>Nombre</label>
         <input
           type="text"
           name="name"
@@ -51,7 +106,7 @@ export default function StudentFilters({ filters, onChange, onClear }) {
         />
       </div>
       <div className="flex flex-col w-24">
-        <label className="text-xs text-blue-800 mb-1">Grado</label>
+        <label>Grado</label>
         <select
           name="grade"
           value={filters.grade}
@@ -64,7 +119,7 @@ export default function StudentFilters({ filters, onChange, onClear }) {
         </select>
       </div>
       <div className="flex flex-col w-28">
-        <label className="text-xs text-blue-800 mb-1">Sección</label>
+        <label>Sección</label>
         <select
           name="section"
           value={filters.section}
@@ -77,7 +132,7 @@ export default function StudentFilters({ filters, onChange, onClear }) {
         </select>
       </div>
       <div className="flex flex-col w-32">
-        <label className="text-xs text-blue-800 mb-1">Nivel Escolar</label>
+        <label>Nivel Escolar</label>
         <select
           name="schoolLevel"
           value={filters.schoolLevel}
@@ -90,7 +145,7 @@ export default function StudentFilters({ filters, onChange, onClear }) {
         </select>
       </div>
       <div className="flex flex-col w-48">
-        <label className="text-xs text-blue-800 mb-1">Curso</label>
+        <label>Curso</label>
         <select
           name="courseId"
           value={filters.courseId}
@@ -107,18 +162,13 @@ export default function StudentFilters({ filters, onChange, onClear }) {
       </div>
       <button
         onClick={onClear}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-white hover:bg-gray-100 border border-gray-300 shadow transition ml-auto"
+        className="flex items-center gap-2"
         title="Limpiar filtros"
       >
         <XCircleIcon className="w-5 h-5 text-gray-400" />
         Limpiar
       </button>
-      {/* Estilos Tailwind extra para inputs, si no está en global.css */}
-      <style>{`
-        .input-filter {
-          @apply px-3 py-2 border border-blue-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition;
-        }
-      `}</style>
     </div>
   );
+
 }

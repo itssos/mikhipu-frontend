@@ -48,33 +48,155 @@ export default function ManualAssistanceTable() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-extrabold mb-6 text-blue-900 text-center">
+    <div className="manual-asist-root max-w-6xl mx-auto px-4 py-8">
+      <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+      .manual-asist-root {
+        font-family: 'Pirata One', cursive, monospace;
+      }
+      .manual-asist-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #184ea3;
+        text-align: center;
+        margin-bottom: 2.2rem;
+        text-shadow: 1px 2px #fff8ec, 2px 5px 12px #a7bcf530;
+      }
+      .manual-asist-card {
+        border-radius: 30px;
+        border: 6px solid #d5c287;
+        background: linear-gradient(123deg, #fffce9 65%, #e2e8f0 100%);
+        box-shadow: 0 0 40px #f6e7aa88, 0 2px 16px #4669ac13;
+        padding: 2.6rem 1.7rem 2.2rem 1.7rem;
+      }
+      .manual-asist-table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: separate;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #fffefb;
+        font-family: inherit;
+      }
+      .manual-asist-table th, .manual-asist-table td {
+        font-size: 1.05rem;
+        padding: 13px 10px;
+        vertical-align: middle;
+      }
+      .manual-asist-table th {
+        background: #f8eebf;
+        color: #174173;
+        border-bottom: 2px solid #e8e3be;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+      .manual-asist-table tr {
+        transition: background 0.14s;
+      }
+      .manual-asist-table tr:hover {
+        background: #e6f0fe !important;
+      }
+      .manual-asist-btn {
+        font-family: inherit;
+        border: none;
+        border-radius: 11px;
+        font-weight: 700;
+        box-shadow: 0 2px 9px #e4e4e433;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        transition: background 0.14s, color 0.1s, box-shadow 0.11s;
+        outline: none;
+      }
+      .manual-asist-btn.entry {
+        background: linear-gradient(90deg, #32b660, #22c55e 80%);
+        color: #fffbea;
+        padding: 7px 16px;
+      }
+      .manual-asist-btn.entry:hover { background: #17a84c; }
+      .manual-asist-btn.exit {
+        background: linear-gradient(90deg, #2563eb, #387ff3 80%);
+        color: #fffbea;
+        padding: 7px 16px;
+      }
+      .manual-asist-btn.exit:hover { background: #174ea6; }
+      .manual-asist-badge {
+        border-radius: 8px;
+        background: #ffe7b7;
+        color: #d97706;
+        font-weight: 600;
+        padding: 2px 12px;
+        font-size: 0.90rem;
+        display: inline-block;
+        margin-top: 2px;
+      }
+      .manual-asist-last-action {
+        color: #6b7280;
+        font-size: 0.94rem;
+      }
+      .manual-asist-last-action .edit-label {
+        color: #e11d48;
+        font-weight: bold;
+        margin-left: 5px;
+      }
+      .manual-asist-pagin {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.55rem;
+        margin-top: 1.7rem;
+      }
+      .manual-asist-pagin button {
+        border-radius: 10px;
+        border: none;
+        font-family: inherit;
+        font-weight: bold;
+        padding: 7px 17px;
+        font-size: 1rem;
+        background: #e2e8f0;
+        color: #174173;
+        transition: background 0.13s, color 0.1s;
+      }
+      .manual-asist-pagin button[disabled] {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .manual-asist-pagin button.active,
+      .manual-asist-pagin button:focus {
+        background: #2563eb;
+        color: #fff;
+      }
+    `}</style>
+
+      <h2 className="manual-asist-title">
         Asistencia Manual de Estudiantes
       </h2>
 
-      <div className="rounded-3xl border border-blue-100 bg-gradient-to-tr from-blue-50 via-white to-slate-100 shadow-2xl py-6 px-3">
+      <div className="manual-asist-card">
         <StudentListFetcher>
           {({ students, filters, loading, error, totalPages, onPageChange }) => (
             <>
-              <div className="w-full overflow-x-auto rounded-xl shadow bg-white/90 border mb-4">
+              <div className="w-full overflow-x-auto rounded-2xl shadow border mb-4 bg-white/95">
                 {loading ? (
-                  <div className="text-center py-6 text-lg animate-pulse">Cargando estudiantes...</div>
+                  <div className="text-center py-6 text-lg animate-pulse text-blue-700">Cargando estudiantes...</div>
                 ) : error ? (
                   <div className="text-red-500 py-6 text-center">{error}</div>
                 ) : (
-                  <table className="w-full border-separate border-spacing-y-1">
+                  <table className="manual-asist-table">
                     <thead>
-                      <tr className="bg-blue-50 text-blue-700 text-sm uppercase">
-                        <th className="p-2 rounded-tl-xl"></th>
-                        <th className="p-2 text-left">Nombre</th>
-                        <th className="p-2 text-left">DNI</th>
-                        <th className="p-2 text-left">Nivel</th>
-                        <th className="p-2 text-left">Grado</th>
-                        <th className="p-2 text-left">Sección</th>
-                        <th className="p-2 text-center">Entrada</th>
-                        <th className="p-2 text-center">Salida</th>
-                        <th className="p-2 rounded-tr-xl text-center">Última acción</th>
+                      <tr>
+                        <th></th>
+                        <th className="text-left">Nombre</th>
+                        <th className="text-left">DNI</th>
+                        <th className="text-left">Nivel</th>
+                        <th className="text-left">Grado</th>
+                        <th className="text-left">Sección</th>
+                        <th className="text-center">Entrada</th>
+                        <th className="text-center">Salida</th>
+                        <th className="text-center">Última acción</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -89,55 +211,53 @@ export default function ManualAssistanceTable() {
                         const record = mark?.data;
 
                         return (
-                          <tr key={student.id} className="hover:bg-blue-50 border-b transition">
-                            <td className="p-2 text-center">
+                          <tr key={student.id}>
+                            <td className="text-center">
                               <CheckCircleIcon className="w-6 h-6 text-blue-300" />
                             </td>
-                            <td className="p-2 font-semibold">{student.fullName}</td>
-                            <td className="p-2">{student.dni}</td>
-                            <td className="p-2">{student.schoolLevel}</td>
-                            <td className="p-2">{student.grade}</td>
-                            <td className="p-2">{student.section}</td>
-                            <td className="p-2 text-center">
+                            <td className="font-semibold">{student.fullName}</td>
+                            <td>{student.dni}</td>
+                            <td>{student.schoolLevel}</td>
+                            <td>{student.grade}</td>
+                            <td>{student.section}</td>
+                            <td className="text-center">
                               <button
-                                className="bg-green-500 hover:bg-green-400 transition text-white px-3 py-1 rounded-lg flex items-center gap-1 shadow"
+                                className="manual-asist-btn entry"
                                 onClick={() => handleMark(student, "entry")}
                               >
                                 <ArrowRightCircleIcon className="w-5 h-5" />
                                 Entrada
                               </button>
-                              {/* Mostrar badge de estado de entrada si se acaba de marcar */}
                               {mark?.type === "entry" && record?.entryStatus && (
-                                <div className="mt-1">
+                                <div className="manual-asist-badge">
                                   <StatusBadge status={record.entryStatus} />
                                 </div>
                               )}
                             </td>
-                            <td className="p-2 text-center">
+                            <td className="text-center">
                               <button
-                                className="bg-blue-600 hover:bg-blue-500 transition text-white px-3 py-1 rounded-lg flex items-center gap-1 shadow"
+                                className="manual-asist-btn exit"
                                 onClick={() => handleMark(student, "exit")}
                               >
                                 <ArrowLeftCircleIcon className="w-5 h-5" />
                                 Salida
                               </button>
-                              {/* Mostrar badge de estado de salida si se acaba de marcar */}
                               {mark?.type === "exit" && record?.exitStatus && (
-                                <div className="mt-1">
+                                <div className="manual-asist-badge">
                                   <StatusBadge status={record.exitStatus} />
                                 </div>
                               )}
                             </td>
-                            <td className="p-2 text-center">
+                            <td className="text-center">
                               {mark ? (
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-xs text-gray-500">
+                                <div className="flex flex-col items-center gap-1 manual-asist-last-action">
+                                  <span>
                                     {mark.type === "entry"
                                       ? `Entrada: ${record?.entryMarkedAt?.replace("T", " ")?.substring(0, 16) || "-"}`
                                       : `Salida: ${record?.exitMarkedAt?.replace("T", " ")?.substring(0, 16) || "-"}`}
                                   </span>
                                   {record?.edited && (
-                                    <span className="text-xs text-pink-600 font-bold">Editado Manual</span>
+                                    <span className="edit-label">Editado Manual</span>
                                   )}
                                 </div>
                               ) : (
@@ -152,11 +272,10 @@ export default function ManualAssistanceTable() {
                 )}
               </div>
               {/* Paginación */}
-              <div className="flex flex-wrap justify-center items-center mt-2 gap-2">
+              <div className="manual-asist-pagin">
                 <button
                   onClick={() => onPageChange(filters.page - 1)}
                   disabled={filters.page === 0}
-                  className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
                 >
                   Anterior
                 </button>
@@ -164,10 +283,7 @@ export default function ManualAssistanceTable() {
                   <button
                     key={idx}
                     onClick={() => onPageChange(idx)}
-                    className={`px-3 py-1 rounded-lg font-bold ${filters.page === idx
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 hover:bg-blue-50"
-                      }`}
+                    className={filters.page === idx ? "active" : ""}
                   >
                     {idx + 1}
                   </button>
@@ -175,7 +291,6 @@ export default function ManualAssistanceTable() {
                 <button
                   onClick={() => onPageChange(filters.page + 1)}
                   disabled={filters.page >= totalPages - 1}
-                  className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
                 >
                   Siguiente
                 </button>
@@ -186,4 +301,5 @@ export default function ManualAssistanceTable() {
       </div>
     </div>
   );
+
 }

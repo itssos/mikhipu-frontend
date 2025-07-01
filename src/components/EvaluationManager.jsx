@@ -168,17 +168,82 @@ export default function EvaluationManager() {
   // MODAL FORMULARIO
   function renderForm(isEdit = false, closeModal, evaId) {
     return (
-      <form className="space-y-3" onSubmit={isEdit
-        ? e => handleEditFormSubmit(e, closeModal, evaId)
-        : e => handleCreateFormSubmit(e, closeModal)
-      }>
+      <form className="adventure-form space-y-3"
+        onSubmit={isEdit
+          ? e => handleEditFormSubmit(e, closeModal, evaId)
+          : e => handleCreateFormSubmit(e, closeModal)
+        }
+      >
+        <style>{`
+    .adventure-form {
+      background: linear-gradient(120deg, #efe1b5 70%, #cfc08a 100%);
+      border: 4px solid #95702a;
+      border-radius: 26px;
+      box-shadow: 0 0 24px #cab06e55;
+      padding: 30px 24px 20px 24px;
+      font-family: 'Pirata One', 'Press Start 2P', cursive, monospace;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .adventure-form label {
+      font-family: 'Pirata One', cursive;
+      color: #7d6827;
+      font-size: 15px;
+      margin-bottom: 2px;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .adventure-form input,
+    .adventure-form select {
+      background: #f7f4e3;
+      border: 2.4px solid #bca974;
+      border-radius: 13px;
+      padding: 10px 13px;
+      font-family: inherit;
+      font-size: 15px;
+      color: #715f3a;
+      outline: none;
+      box-shadow: 1px 2px #e8dfb5;
+      transition: border 0.17s, box-shadow 0.15s, background 0.17s;
+      margin-top: 2px;
+    }
+    .adventure-form input:focus,
+    .adventure-form select:focus {
+      border-color: #8a7e56;
+      background: #fffde2;
+      box-shadow: 0 2px 12px #cab06e44;
+    }
+    .adventure-form textarea {
+      background: #f7f4e3;
+      border: 2.4px solid #bca974;
+      border-radius: 13px;
+      padding: 10px 13px;
+      font-family: inherit;
+      font-size: 15px;
+      color: #715f3a;
+      resize: vertical;
+      min-height: 70px;
+      margin-top: 2px;
+      outline: none;
+      transition: border 0.17s, box-shadow 0.15s, background 0.17s;
+      box-shadow: 1px 2px #e8dfb5;
+    }
+    .adventure-form textarea:focus {
+      border-color: #8a7e56;
+      background: #fffde2;
+      box-shadow: 0 2px 12px #cab06e44;
+    }
+    .adventure-form .flex {
+      gap: 16px;
+    }
+  `}</style>
+
         <div>
-          <label className="block text-xs mb-1">Curso <span className="text-red-500">*</span></label>
+          <label>Curso <span className="text-red-500">*</span></label>
           <select
             name="courseId"
             value={form.courseId}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 test-course-evaluation-create py-1 border border-gray-200"
             required
           >
             <option value="">Selecciona...</option>
@@ -188,23 +253,21 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs mb-1">Nombre <span className="text-red-500">*</span></label>
+          <label>Nombre <span className="text-red-500">*</span></label>
           <input
             name="name"
             value={form.name}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
             required
             maxLength={50}
           />
         </div>
         <div>
-          <label className="block text-xs mb-1">Tipo <span className="text-red-500">*</span></label>
+          <label>Tipo <span className="text-red-500">*</span></label>
           <select
             name="type"
             value={form.type}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 test-type-evaluation-create py-1 border border-gray-200"
             required
           >
             <option value="">Selecciona...</option>
@@ -214,74 +277,74 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs mb-1">Peso (%) <span className="text-red-500">*</span></label>
+          <label>Peso (%) <span className="text-red-500">*</span></label>
           <input
             name="weight"
             type="number"
             value={form.weight}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
             required min={1} max={100}
           />
         </div>
         <div>
-          <label className="block text-xs mb-1">Fecha <span className="text-red-500">*</span></label>
+          <label>Fecha <span className="text-red-500">*</span></label>
           <input
             name="date"
             type="date"
             value={form.date}
             onChange={handleFormChange}
-            className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
             required
           />
         </div>
         <div className="flex gap-3">
-          <div className="flex-1">
-            <label className="block text-xs mb-1">Nota mínima <span className="text-red-500">*</span></label>
+          <div className="flex-1" >
+            <label>Nota mínima <span className="text-red-500">*</span></label>
             <input
               name="minScore"
               type="number"
               value={form.minScore}
               onChange={handleFormChange}
-              className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
+              style={{maxWidth:'70px'}}
               required
             />
           </div>
-          <div className="flex-1">
-            <label className="block text-xs mb-1">Nota máxima <span className="text-red-500">*</span></label>
+          <div className="flex-1" >
+            <label>Nota máxima <span className="text-red-500">*</span></label>
             <input
               name="maxScore"
               type="number"
               value={form.maxScore}
               onChange={handleFormChange}
-              className="w-full rounded-xl shadow px-2 py-1 border border-gray-200"
+              style={{maxWidth:'70px'}}
               required
             />
           </div>
         </div>
       </form>
+
     );
   }
 
   // RENDER
   return (
-    <div className="p-6 rounded-2xl shadow-2xl bg-gradient-to-br from-blue-50 via-white to-purple-100 max-w-5xl mx-auto mt-8">
+    <div className="panel-adventure" style={{ maxWidth: 1080, margin: "40px auto 0 auto" }}>
       <ToastContainer position="top-right" autoClose={1800} hideProgressBar />
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-gray-800">Gestión de Evaluaciones</h2>
-        {/* Modal crear */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+        <h2 className="adventure-title w-full">Gestión de Evaluaciones</h2>
         {canCreate && (
           <Modal
             title="Nueva Evaluación"
+            bg='bg-transparent'
+            shadow={false}
             trigger={
               <button
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-2xl shadow-lg transition-all"
+                className="btn-adventure"
                 onClick={() => {
                   setForm(emptyForm());
                   setEditingId(null);
                 }}
               >
-                <PlusIcon className="h-5 w-5" /> Nueva evaluación
+                <PlusIcon style={{ width: 22, height: 22, marginRight: 7, verticalAlign: -4 }} /> Nueva evaluación
               </button>
             }
             size="md"
@@ -290,29 +353,29 @@ export default function EvaluationManager() {
                 label: "Guardar",
                 onClick: (e, closeModal) => handleCreateFormSubmit(e, closeModal),
                 closeOnClick: false,
-                className: "bg-blue-600 text-white"
+                className: "btn-adventure"
               },
-              { label: "Cancelar", className: "bg-gray-300" }
+              { label: "Cancelar", className: "btn-adventure-secondary" }
             ]}
           >
             {renderForm(false)}
           </Modal>
         )}
-
       </div>
 
       {/* FILTROS */}
       <form
-        className="flex flex-wrap items-end gap-3 mb-6 bg-white/80 rounded-xl shadow px-4 py-3"
+        className="panel-adventure"
+        style={{ display: "flex", flexWrap: "wrap", alignItems: "end", gap: 17, marginBottom: 32, background: "#fffbe5", minHeight: 0 }}
         onSubmit={e => { e.preventDefault(); fetchEvaluations(0, filter); }}
       >
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Curso</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Curso</label>
           <select
             name="courseId"
             value={filter.courseId}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="select-adventure"
           >
             <option value="">Todos</option>
             {courses.map(c => (
@@ -321,12 +384,12 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Docente</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Docente</label>
           <select
             name="teacherId"
             value={filter.teacherId}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="select-adventure"
           >
             <option value="">Todos</option>
             {teachers.map(t => (
@@ -335,23 +398,23 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Año</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Año</label>
           <input
             name="year"
             type="number"
             value={filter.year}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200 w-24"
+            className="input-adventure"
             min="2000"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Trimestre</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Trimestre</label>
           <select
             name="quarter"
             value={filter.quarter}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="select-adventure"
           >
             <option value="">Todos</option>
             {QUARTERS.map(q => (
@@ -360,12 +423,12 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Tipo</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Tipo</label>
           <select
             name="type"
             value={filter.type}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="select-adventure"
           >
             <option value="">Todos</option>
             {EVALUATION_TYPES.map(type => (
@@ -374,84 +437,86 @@ export default function EvaluationManager() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Desde</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Desde</label>
           <input
             name="startDate"
             type="date"
             value={filter.startDate}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="input-adventure"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Hasta</label>
+          <label style={{ fontSize: 13, color: "#b7a751", marginBottom: 4, display: "block" }}>Hasta</label>
           <input
             name="endDate"
             type="date"
             value={filter.endDate}
             onChange={handleFilterChange}
-            className="rounded-xl shadow px-2 py-1 border border-gray-200"
+            className="input-adventure"
           />
         </div>
         <button
           type="submit"
-          className="flex items-center gap-1 bg-gray-900 hover:bg-gray-700 text-white px-4 py-1.5 rounded-2xl shadow-md"
+          className="btn-adventure"
+          style={{ minWidth: 100, marginLeft: 10 }}
         >
-          <MagnifyingGlassIcon className="h-5 w-5" /> Buscar
+          <MagnifyingGlassIcon style={{ width: 19, height: 19, marginRight: 4, verticalAlign: -4 }} /> Buscar
         </button>
       </form>
 
       {/* TABLA */}
-      <div className="overflow-x-auto rounded-xl shadow">
-        <table className="min-w-full bg-white rounded-xl text-sm shadow">
+      <div style={{ overflowX: "auto", borderRadius: 16 }}>
+        <table className="table-adventure" style={{ minWidth: 750 }}>
           <thead>
-            <tr className="bg-blue-100 text-gray-800">
-              <th className="px-3 py-2 rounded-tl-xl">Curso</th>
-              <th className="px-3 py-2">Nombre</th>
-              <th className="px-3 py-2">Tipo</th>
-              <th className="px-3 py-2">Fecha</th>
-              <th className="px-3 py-2">Peso (%)</th>
-              <th className="px-3 py-2">Mín.</th>
-              <th className="px-3 py-2">Máx.</th>
-              {(canUpdate || canDelete) && (
-                <th className="px-3 py-2 rounded-tr-xl">Acciones</th>
-              )}
+            <tr>
+              <th>Curso</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Peso (%)</th>
+              <th>Mín.</th>
+              <th>Máx.</th>
+              {(canUpdate || canDelete) && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
             {evaluations?.content?.length === 0 && !loading && (
               <tr>
-                <td colSpan={8} className="text-center py-8 text-gray-400">
-                  No hay evaluaciones encontradas.
+                <td colSpan={8}>
+                  <div className="note-adventure text-center" style={{ margin: 0 }}>
+                    No hay evaluaciones encontradas.
+                  </div>
                 </td>
               </tr>
             )}
             {loading && (
               <tr>
-                <td colSpan={8} className="text-center py-8 text-blue-400">Cargando...</td>
+                <td colSpan={8}>
+                  <div className="note-adventure text-center" style={{ color: "#9679a2" }}>
+                    Cargando...
+                  </div>
+                </td>
               </tr>
             )}
             {evaluations?.content?.map(eva => (
-              <tr
-                key={eva.id}
-                className="hover:bg-blue-50 transition-all"
-              >
-                <td className="px-3 py-2">{eva.courseName}</td>
-                <td className="px-3 py-2">{eva.name}</td>
-                <td className="px-3 py-2">{eva.type}</td>
-                <td className="px-3 py-2">{eva.date}</td>
-                <td className="px-3 py-2">{eva.weight}</td>
-                <td className="px-3 py-2">{eva.minScore}</td>
-                <td className="px-3 py-2">{eva.maxScore}</td>
+              <tr key={eva.id}>
+                <td>{eva.courseName}</td>
+                <td>{eva.name}</td>
+                <td>{eva.type}</td>
+                <td>{eva.date}</td>
+                <td>{eva.weight}</td>
+                <td>{eva.minScore}</td>
+                <td>{eva.maxScore}</td>
                 {(canUpdate || canDelete) && (
-                  <td className="px-3 py-2 flex gap-2">
-                    {/* Modal Editar (trigger botón editar) */}
+                  <td>
+                    {/* Modal Editar */}
                     {canUpdate && (
                       <Modal
                         title="Editar Evaluación"
                         trigger={
                           <button
-                            className="bg-green-100 hover:bg-green-200 rounded-full p-2 shadow"
+                            className="btn-adventure-icon"
                             title="Editar"
                             onClick={async () => {
                               setEditingId(eva.id);
@@ -465,7 +530,7 @@ export default function EvaluationManager() {
                               setEditModalOpenId(eva.id);
                             }}
                           >
-                            <PencilSquareIcon className="h-5 w-5" />
+                            <PencilSquareIcon style={{ width: 19, height: 19 }} />
                           </button>
                         }
                         size="md"
@@ -474,26 +539,25 @@ export default function EvaluationManager() {
                             label: "Guardar",
                             onClick: (e, closeModal) => handleEditFormSubmit(e, closeModal, eva.id),
                             closeOnClick: false,
-                            className: "bg-blue-600 text-white"
+                            className: "btn-adventure"
                           },
-                          { label: "Cancelar", className: "bg-gray-300" }
+                          { label: "Cancelar", className: "btn-adventure-secondary" }
                         ]}
                       >
                         {editingId === eva.id && renderForm(true)}
                       </Modal>
                     )}
-
-                    {/* Modal Eliminar (trigger botón eliminar) */}
+                    {/* Modal Eliminar */}
                     {canDelete && (
                       <Modal
                         title="¿Eliminar evaluación?"
                         trigger={
                           <button
-                            className="bg-red-100 hover:bg-red-200 rounded-full p-2 shadow"
+                            className="btn-adventure-icon"
                             title="Eliminar"
                             onClick={() => setDeleteModalOpenId(eva.id)}
                           >
-                            <TrashIcon className="h-5 w-5" />
+                            <TrashIcon style={{ width: 19, height: 19 }} />
                           </button>
                         }
                         size="sm"
@@ -501,18 +565,17 @@ export default function EvaluationManager() {
                           {
                             label: "Sí, eliminar",
                             onClick: (e, closeModal) => handleDelete(eva.id, closeModal),
-                            className: "bg-red-600 text-white"
+                            className: "btn-adventure-secondary"
                           },
-                          { label: "Cancelar", className: "bg-gray-300" }
+                          { label: "Cancelar", className: "btn-adventure" }
                         ]}
                       >
-                        <div className="text-center py-4">
+                        <div style={{ textAlign: "center", padding: 18 }}>
                           ¿Seguro que deseas eliminar esta evaluación? <br />
-                          Esta acción no se puede deshacer.
+                          <span style={{ color: "#b53" }}>Esta acción no se puede deshacer.</span>
                         </div>
                       </Modal>
                     )}
-
                   </td>
                 )}
               </tr>
@@ -529,4 +592,5 @@ export default function EvaluationManager() {
       />
     </div>
   );
+
 }

@@ -151,234 +151,268 @@ const StudentModal = ({ trigger, studentId }) => {
 
 
   return (
-    <>
-      <Modal
-        trigger={<div className='flex justify-center items-center' onClick={open}>{trigger}</div>}
-        open={isOpen}
-        onClose={close}
-        title={studentId ? 'Editar Estudiante' : 'Crear Estudiante'}
-        size="xl"
-        actions={[
-          { label: 'Cancelar', onClick: close, className: 'bg-gray-200 text-gray-700 px-4 py-2 rounded' },
-          { label: studentId ? 'Actualizar' : 'Crear', onClick: handleSave, className: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' }
-        ]}
-      >
-        <div className="space-y-6">
-          {/* Persona */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <IdentificationIcon className="w-5 h-5 text-gray-500" />
-                <span>Nombre</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.firstName}
-                onChange={e => handleChange('person.firstName', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <IdentificationIcon className="w-5 h-5 text-gray-500" />
-                <span>Apellido</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.lastName}
-                onChange={e => handleChange('person.lastName', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <IdentificationIcon className="w-5 h-5 text-gray-500" />
-                <span>DNI</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.dni}
-                onChange={e => handleChange('person.dni', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <CalendarIcon className="w-5 h-5 text-gray-500" />
-                <span>Fecha Nac.</span>
-              </label>
-              <input
-                type="date"
-                value={studentForm.person.birthDate}
-                onChange={e => handleChange('person.birthDate', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <UserGroupIcon className="w-5 h-5 text-gray-500" />
-                <span>Género</span>
-              </label>
-              <select
-                value={studentForm.person.gender}
-                onChange={e => handleChange('person.gender', e.target.value)}
-                className="w-full border p-2 rounded"
-              >
-                <option value="MASCULINO">Masculino</option>
-                <option value="FEMENINO">Femenino</option>
-              </select>
-            </div>
-            <div className="col-span-2">
-              <label className="flex items-center space-x-2 mb-1">
-                <UserIcon className="w-5 h-5 text-gray-500" />
-                <span>Dirección</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.address}
-                onChange={e => handleChange('person.address', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <UserIcon className="w-5 h-5 text-gray-500" />
-                <span>Teléfono</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.phone}
-                onChange={e => handleChange('person.phone', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
+  <>
+    <Modal
+      trigger={<div className='flex justify-center items-center' onClick={open}>{trigger}</div>}
+      open={isOpen}
+      onClose={close}
+      bg='panel-adventure'
+      title={studentId ? 'Editar Estudiante' : 'Crear Estudiante'}
+      size="xl"
+      actions={[
+        { label: 'Cancelar', onClick: close, className: 'btn-adventure-secondary' },
+        { label: studentId ? 'Actualizar' : 'Crear', onClick: handleSave, className: 'btn-adventure' }
+      ]}
+    >
+      <div className="adventure-form space-y-7">
+        {/* Persona */}
+        <div className="adventure-grid-2">
+          <div>
+            <label className="adventure-label"><IdentificationIcon className="icon-adventure" />Nombre</label>
+            <input
+              type="text"
+              value={studentForm.person.firstName}
+              onChange={e => handleChange('person.firstName', e.target.value)}
+              className="adventure-input"
+            />
           </div>
-
-          {/* Usuario */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <UserIcon className="w-5 h-5 text-gray-500" />
-                <span>Usuario</span>
-              </label>
-              <input
-                type="text"
-                value={studentForm.person.user.username}
-                onChange={e => handleChange('person.user.username', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            {!studentId && (
-              <div>
-                <label className="flex items-center space-x-2 mb-1">
-                  <PencilIcon className="w-5 h-5 text-gray-500" />
-                  <span>Contraseña</span>
-                </label>
-                <input
-                  type="password"
-                  value={studentForm.person.user.password}
-                  onChange={e => handleChange('person.user.password', e.target.value)}
-                  className="w-full border p-2 rounded"
-                />
-              </div>
-            )}
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <UserGroupIcon className="w-5 h-5 text-gray-500" />
-                <span>Rol</span>
-              </label>
-              <select
-                value={studentForm.person.user.role}
-                onChange={e => handleChange('person.user.role', e.target.value)}
-                className="w-full border p-2 rounded"
-              >
-                <option value="">-- Seleccione --</option>
-                {roles.map(r => (
-                  <option key={r.id} value={r.name}>{r.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <IdentificationIcon className="w-5 h-5 text-gray-500" />
-                <span>Email</span>
-              </label>
-              <input
-                type="email"
-                value={studentForm.person.user.email}
-                onChange={e => handleChange('person.user.email', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
+          <div>
+            <label className="adventure-label"><IdentificationIcon className="icon-adventure" />Apellido</label>
+            <input
+              type="text"
+              value={studentForm.person.lastName}
+              onChange={e => handleChange('person.lastName', e.target.value)}
+              className="adventure-input"
+            />
           </div>
-
-          {/* Estudiante */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <AcademicCapIcon className="w-5 h-5 text-gray-500" />
-                <span>Grado</span>
-              </label>
-              <input
-                type="number"
-                value={studentForm.grade}
-                onChange={e => handleChange('grade', e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <IdentificationIcon className="w-5 h-5 text-gray-500" />
-                <span>Sección</span>
-              </label>
-              <select
-                value={studentForm.section}
-                onChange={e => handleChange('section', e.target.value)}
-                className="w-full border p-2 rounded"
-              >
-                {['A', 'B', 'C', 'D', 'E', 'F'].map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="flex items-center space-x-2 mb-1">
-                <AcademicCapIcon className="w-5 h-5 text-gray-500" />
-                <span>Nivel</span>
-              </label>
-              <select
-                value={studentForm.schoolLevel}
-                onChange={e => handleChange('schoolLevel', e.target.value)}
-                className="w-full border p-2 rounded"
-              >
-                <option value="INICIAL">Inicial</option>
-                <option value="PRIMARIA">Primaria</option>
-              </select>
-            </div>
-            <div className="col-span-3">
-              <label className="flex items-center space-x-2 mb-1">
-                <UserGroupIcon className="w-5 h-5 text-gray-500" />
-                <span>Representantes</span>
-              </label>
-              <Select
-                isMulti
-                options={reps.map(r => ({
-                  value: r.id,
-                  label: `${r.person.firstName} ${r.person.lastName} (${r.relationship})`
-                }))}
-                value={selectedReps}
-                onChange={setSelectedReps}
-                className="w-full"
-              />
-
-
-            </div>
+          <div>
+            <label className="adventure-label"><IdentificationIcon className="icon-adventure" />DNI</label>
+            <input
+              type="text"
+              value={studentForm.person.dni}
+              onChange={e => handleChange('person.dni', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+          <div>
+            <label className="adventure-label"><CalendarIcon className="icon-adventure" />Fecha Nac.</label>
+            <input
+              type="date"
+              value={studentForm.person.birthDate}
+              onChange={e => handleChange('person.birthDate', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+          <div>
+            <label className="adventure-label"><UserGroupIcon className="icon-adventure" />Género</label>
+            <select
+              value={studentForm.person.gender}
+              onChange={e => handleChange('person.gender', e.target.value)}
+              className="adventure-input"
+            >
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMENINO">Femenino</option>
+            </select>
+          </div>
+          <div className="">
+            <label className="adventure-label"><UserIcon className="icon-adventure" />Dirección</label>
+            <input
+              type="text"
+              value={studentForm.person.address}
+              onChange={e => handleChange('person.address', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+          <div>
+            <label className="adventure-label"><UserIcon className="icon-adventure" />Teléfono</label>
+            <input
+              type="text"
+              value={studentForm.person.phone}
+              onChange={e => handleChange('person.phone', e.target.value)}
+              className="adventure-input"
+            />
           </div>
         </div>
-      </Modal>
-    </>
-  );
+
+        {/* Usuario */}
+        <div className="adventure-grid-2">
+          <div>
+            <label className="adventure-label"><UserIcon className="icon-adventure" />Usuario</label>
+            <input
+              type="text"
+              value={studentForm.person.user.username}
+              onChange={e => handleChange('person.user.username', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+          {!studentId && (
+            <div>
+              <label className="adventure-label"><PencilIcon className="icon-adventure" />Contraseña</label>
+              <input
+                type="password"
+                value={studentForm.person.user.password}
+                onChange={e => handleChange('person.user.password', e.target.value)}
+                className="adventure-input"
+              />
+            </div>
+          )}
+          <div>
+            <label className="adventure-label"><UserGroupIcon className="icon-adventure" />Rol</label>
+            <select
+              value={studentForm.person.user.role}
+              onChange={e => handleChange('person.user.role', e.target.value)}
+              className="adventure-input"
+            >
+              <option value="">-- Seleccione --</option>
+              {roles.map(r => (
+                <option key={r.id} value={r.name}>{r.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="adventure-label"><IdentificationIcon className="icon-adventure" />Email</label>
+            <input
+              type="email"
+              value={studentForm.person.user.email}
+              onChange={e => handleChange('person.user.email', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+        </div>
+
+        {/* Estudiante */}
+        <div className="adventure-grid-3">
+          <div>
+            <label className="adventure-label"><AcademicCapIcon className="icon-adventure" />Grado</label>
+            <input
+              type="number"
+              value={studentForm.grade}
+              onChange={e => handleChange('grade', e.target.value)}
+              className="adventure-input"
+            />
+          </div>
+          <div>
+            <label className="adventure-label"><IdentificationIcon className="icon-adventure" />Sección</label>
+            <select
+              value={studentForm.section}
+              onChange={e => handleChange('section', e.target.value)}
+              className="adventure-input"
+            >
+              {['A', 'B', 'C', 'D', 'E', 'F'].map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="adventure-label"><AcademicCapIcon className="icon-adventure" />Nivel</label>
+            <select
+              value={studentForm.schoolLevel}
+              onChange={e => handleChange('schoolLevel', e.target.value)}
+              className="adventure-input"
+            >
+              <option value="INICIAL">Inicial</option>
+              <option value="PRIMARIA">Primaria</option>
+            </select>
+          </div>
+          <div className="col-span-3">
+            <label className="adventure-label"><UserGroupIcon className="icon-adventure" />Representantes</label>
+            <Select
+              isMulti
+              options={reps.map(r => ({
+                value: r.id,
+                label: `${r.person.firstName} ${r.person.lastName} (${r.relationship})`
+              }))}
+              value={selectedReps}
+              onChange={setSelectedReps}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </div>
+      <style>{`
+        .adventure-form {
+          font-family: 'Georgia', serif;
+        }
+        .adventure-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+        }
+        .adventure-grid-3 {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 24px;
+        }
+        .adventure-label {
+          font-weight: bold;
+          margin-bottom: 5px;
+          font-family: 'Georgia', serif;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          font-size: 1em;
+        }
+        .adventure-input {
+          border: 1.5px solid #e4ca85;
+          border-radius: 9px;
+          padding: 9px 13px;
+          font-size: 1em;
+          background: #fffef7;
+          font-family: 'Georgia', serif;
+          box-shadow: 0 1px 6px #efdfba33;
+          transition: border-color .18s, box-shadow .18s;
+        }
+        .adventure-input:focus {
+          border-color: #b99329;
+          outline: none;
+          box-shadow: 0 0 0 2px #edd68c66;
+          background: #fffbe8;
+        }
+        .icon-adventure {
+          width: 20px;
+          height: 20px;
+        }
+        .btn-adventure {
+          background: linear-gradient(90deg, #edd392 30%, #bba05a 100%);
+          color: #5b440e;
+          border: none;
+          font-family: 'Georgia', serif;
+          border-radius: 11px;
+          font-weight: bold;
+          padding: 9px 21px;
+          font-size: 1rem;
+          box-shadow: 0 2px 10px #ecd18c33;
+          transition: background .18s, color .18s;
+        }
+        .btn-adventure:hover {
+          background: linear-gradient(90deg, #ffe8b8 15%, #b48a34 100%);
+          color: #836a24;
+        }
+        .btn-adventure-secondary {
+          background: #f5f3ef;
+          color: #85652d;
+          border-radius: 10px;
+          border: 1.5px solid #dbc27f;
+          font-family: 'Georgia', serif;
+          font-weight: bold;
+          padding: 9px 18px;
+          font-size: 1rem;
+          transition: background .18s, color .18s;
+        }
+        .btn-adventure-secondary:hover {
+          background: #e9e3d6;
+          color: #ad8a42;
+        }
+        @media (max-width: 800px) {
+          .adventure-grid-2, .adventure-grid-3 {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </Modal>
+  </>
+);
+
 };
 
 export default StudentModal;

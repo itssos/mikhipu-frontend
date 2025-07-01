@@ -9,7 +9,7 @@ const DeleteButton = ({ onClick, className = '', ...props }) => {
       className={`hover:scale-110 cursor-pointer shadow-sm shadow-black transition-normal duration-300 rounded ${className}`}
       {...props}
     >
-      <TrashIcon className="text-red-500 cursor-pointer" />
+      🗑️
     </button>
   );
 };

@@ -54,8 +54,144 @@ export default function AssistanceRecordsList() {
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg max-w-full">
-      <h2 className="text-xl font-bold mb-4 text-gray-700">Registros de Asistencia</h2>
+    <div className="asist-records-panel max-w-4xl mx-auto mt-10 mb-8">
+      <style>{`
+      .asist-records-panel {
+        background: #f8f3e0;
+        border: 7px solid #c5a96c;
+        border-radius: 28px;
+        box-shadow: 0 0 32px #0005, 0 2px 18px #e5d9b355;
+        font-family: 'Pirata One', cursive, monospace;
+        padding: 2.5rem 2rem 1.5rem 2rem;
+      }
+      .asist-tbl-title {
+        font-size: 1.5rem;
+        color: #a78437;
+        margin-bottom: 1.6rem;
+        text-shadow: 0 1.5px #fffdf4, 2px 4px 14px #c1b06e44;
+        font-family: 'Pirata One', cursive;
+        letter-spacing: 1.1px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .asist-table {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 14px #e1c89455;
+        background: #fdfae9;
+        font-family: inherit;
+      }
+      .asist-table th, .asist-table td {
+        font-size: 1rem;
+        padding: 12px 10px;
+      }
+      .asist-table th {
+        background: #fff3ce;
+        color: #8b7032;
+        font-weight: bold;
+        border-bottom: 2px solid #e6ddbb;
+      }
+      .asist-table tr {
+        transition: background 0.16s;
+      }
+      .asist-table tr:hover {
+        background: #fbeaa0 !important;
+      }
+      .asist-table td {
+        color: #6c5522;
+      }
+      .asist-edit-btn {
+        background: linear-gradient(90deg, #f4b63e, #e3a720 80%);
+        color: #fff6e0;
+        border: none;
+        border-radius: 12px;
+        padding: 6px 17px;
+        font-size: 0.93rem;
+        font-weight: bold;
+        box-shadow: 0 1.5px 7px #e6bb5055;
+        cursor: pointer;
+        transition: background .13s, box-shadow .12s;
+      }
+      .asist-edit-btn:hover { background: #dcae3e; color: #fff; }
+      .asist-pagination {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        align-items: flex-end;
+        margin-top: 1.2rem;
+      }
+      @media (min-width: 640px) {
+        .asist-pagination { flex-direction: row; align-items: center; justify-content: space-between; }
+      }
+      .asist-modal-bg {
+        background: rgba(55, 48, 7, 0.33);
+        z-index: 50;
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .asist-modal {
+        background: #fffbe7;
+        border: 6px solid #c5a96c;
+        border-radius: 18px;
+        box-shadow: 0 10px 38px #96772a33, 0 4px 20px #ad934788;
+        max-width: 370px;
+        min-width: 320px;
+        width: 97%;
+        padding: 2.2rem 2rem 1.4rem 2rem;
+        position: relative;
+        font-family: inherit;
+      }
+      .asist-modal-title {
+        font-size: 1.25rem;
+        color: #886d2a;
+        margin-bottom: 1.4rem;
+        font-family: 'Pirata One', cursive;
+      }
+      .asist-modal-btn {
+        border: none;
+        border-radius: 13px;
+        padding: 8px 19px;
+        font-weight: bold;
+        background: #458be2;
+        color: #fffbea;
+        font-family: 'Pirata One', cursive;
+        margin-left: 8px;
+        transition: background .13s;
+      }
+      .asist-modal-btn:hover { background: #2563eb; }
+      .asist-modal-cancel {
+        background: #f6f3e7;
+        color: #8b7b32;
+      }
+      .asist-select, .asist-size-select {
+        padding: 7px 13px;
+        border-radius: 10px;
+        border: 2px solid #e9d9a6;
+        background: #f8f6ee;
+        color: #745b23;
+        font-size: 1rem;
+        font-family: 'Pirata One', cursive;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        transition: border .13s;
+      }
+      .asist-select:focus, .asist-size-select:focus {
+        border-color: #a78437;
+        outline: none;
+      }
+    `}</style>
+
+      <h2 className="asist-tbl-title">
+        <svg width="24" height="24" fill="none" stroke="#a78437" strokeWidth="1.5" viewBox="0 0 24 24">
+          <path d="M3 3v18h18M3 17l6-6 4 4 8-8" />
+        </svg>
+        Registros de Asistencia
+      </h2>
+
       <AssistanceFilterFetcher fetchFunction={getAssistanceRecords}>
         {({
           content: records,
@@ -68,20 +204,20 @@ export default function AssistanceRecordsList() {
           refetch,
         }) => (
           <>
-            {/* Tabla de resultados */}
-            <div className="overflow-x-auto rounded-lg border border-gray-200 shadow mb-4">
-              <table className="min-w-full bg-white">
-                <thead className="bg-blue-50">
+            {/* Tabla */}
+            <div className="overflow-x-auto mb-4 asist-table">
+              <table className="min-w-full">
+                <thead>
                   <tr>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Fecha</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Apellido</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Nombre</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Nivel</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Grado</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Sección</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Estado entrada</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700">Estado salida</th>
-                    <th className="px-3 py-2 text-center text-sm font-bold text-gray-700">Acciones</th>
+                    <th>Fecha</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>Nivel</th>
+                    <th>Grado</th>
+                    <th>Sección</th>
+                    <th>Estado entrada</th>
+                    <th>Estado salida</th>
+                    <th className="text-center">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,18 +242,18 @@ export default function AssistanceRecordsList() {
                     </tr>
                   ) : (
                     records.map(rec => (
-                      <tr key={rec.id} className="border-b last:border-b-0 hover:bg-blue-50/30">
-                        <td className="px-3 py-2 text-sm">{rec.date}</td>
-                        <td className="px-3 py-2 text-sm">{rec.lastName}</td>
-                        <td className="px-3 py-2 text-sm">{rec.firstName}</td>
-                        <td className="px-3 py-2 text-sm">{rec.schoolLevel || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.grade || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.section || "-"}</td>
-                        <td className="px-3 py-2 text-sm">{rec.entryStatus}</td>
-                        <td className="px-3 py-2 text-sm">{rec.exitStatus}</td>
-                        <td className="px-3 py-2 text-center">
+                      <tr key={rec.id} className="border-b last:border-b-0">
+                        <td>{rec.date}</td>
+                        <td>{rec.lastName}</td>
+                        <td>{rec.firstName}</td>
+                        <td>{rec.schoolLevel || "-"}</td>
+                        <td>{rec.grade || "-"}</td>
+                        <td>{rec.section || "-"}</td>
+                        <td>{rec.entryStatus}</td>
+                        <td>{rec.exitStatus}</td>
+                        <td className="text-center">
                           <button
-                            className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-xl shadow text-xs font-bold"
+                            className="asist-edit-btn"
                             onClick={() => handleEdit(rec)}
                           >
                             Editar
@@ -129,10 +265,11 @@ export default function AssistanceRecordsList() {
                 </tbody>
               </table>
             </div>
+
             {/* Paginación */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+            <div className="asist-pagination">
               <div>
-                <span className="text-sm text-gray-600">
+                <span className="text-base text-yellow-900">
                   {totalElements > 0 &&
                     `Mostrando ${filters.page * filters.size + 1}-${Math.min((filters.page + 1) * filters.size, totalElements)} de ${totalElements} registros`
                   }
@@ -140,18 +277,18 @@ export default function AssistanceRecordsList() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold disabled:opacity-50"
+                  className="asist-edit-btn asist-modal-cancel"
                   onClick={() => onPageChange(filters.page - 1)}
                   disabled={filters.page === 0}
                 >Anterior</button>
-                <span className="text-sm font-bold">{(filters.page + 1)} / {totalPages || 1}</span>
+                <span className="text-base font-bold text-yellow-900">{(filters.page + 1)} / {totalPages || 1}</span>
                 <button
-                  className="px-3 py-1 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold disabled:opacity-50"
+                  className="asist-edit-btn"
                   onClick={() => onPageChange(filters.page + 1)}
                   disabled={filters.page + 1 >= totalPages}
                 >Siguiente</button>
                 <select
-                  className="ml-3 px-2 py-1 rounded-xl border border-gray-200 text-sm"
+                  className="asist-size-select"
                   value={filters.size}
                   onChange={e => onPageChange(0, parseInt(e.target.value))}
                 >
@@ -161,19 +298,24 @@ export default function AssistanceRecordsList() {
                 </select>
               </div>
             </div>
-            {/* Modal de edición */}
+
+            {/* Modal Edición */}
             {editing && (
-              <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-                <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative">
-                  <h3 className="text-lg font-bold mb-4 text-gray-700">Editar registro</h3>
+              <div className="asist-modal-bg">
+                <div className="asist-modal">
+                  <h3 className="asist-modal-title">Editar registro</h3>
                   <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-1">Fecha: <b>{editing.date}</b></div>
-                    <div className="text-sm text-gray-600 mb-1">Estudiante: <b>{editing.studentFullName || editing.studentId}</b></div>
+                    <div className="text-sm text-yellow-800 mb-1">
+                      Fecha: <b>{editing.date}</b>
+                    </div>
+                    <div className="text-sm text-yellow-800 mb-1">
+                      Estudiante: <b>{editing.studentFullName || editing.studentId}</b>
+                    </div>
                   </div>
                   <div className="mb-3">
-                    <label className="block text-gray-700 text-sm mb-1">Estado entrada</label>
+                    <label className="asist-label">Estado entrada</label>
                     <select
-                      className="w-full px-3 py-2 border border-gray-200 rounded-xl shadow"
+                      className="asist-select w-full"
                       value={editEntryStatus}
                       onChange={e => setEditEntryStatus(e.target.value)}
                     >
@@ -183,9 +325,9 @@ export default function AssistanceRecordsList() {
                     </select>
                   </div>
                   <div className="mb-3">
-                    <label className="block text-gray-700 text-sm mb-1">Estado salida</label>
+                    <label className="asist-label">Estado salida</label>
                     <select
-                      className="w-full px-3 py-2 border border-gray-200 rounded-xl shadow"
+                      className="asist-select w-full"
                       value={editExitStatus}
                       onChange={e => setEditExitStatus(e.target.value)}
                     >
@@ -196,14 +338,14 @@ export default function AssistanceRecordsList() {
                   </div>
                   <div className="flex justify-end gap-3 mt-5">
                     <button
-                      className="px-4 py-2 bg-gray-100 rounded-xl text-gray-600 font-bold hover:bg-gray-200"
+                      className="asist-modal-btn asist-modal-cancel"
                       onClick={() => setEditing(null)}
                       disabled={savingEdit}
                     >
                       Cancelar
                     </button>
                     <button
-                      className="px-4 py-2 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600"
+                      className="asist-modal-btn"
                       onClick={() => handleSaveEdit(refetch)}
                       disabled={savingEdit}
                     >
@@ -218,4 +360,5 @@ export default function AssistanceRecordsList() {
       </AssistanceFilterFetcher>
     </div>
   );
+
 }

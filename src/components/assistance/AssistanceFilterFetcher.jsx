@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getStudents } from "../../api/students";
 import { getCourses } from "../../api/courses";
+import useAuth from "../../hooks/useAuth";
+import useRol from "../../hooks/useRol";
 
-// Opciones de los selects
 const ENTRY_STATUS = [
   { value: "", label: "Todos" },
   { value: "PRESENTE", label: "Presente" },
@@ -10,25 +11,21 @@ const ENTRY_STATUS = [
   { value: "AUSENTE", label: "Ausente" },
   { value: "NO_MARCADA", label: "No marcada" }
 ];
-
 const EXIT_STATUS = [
   { value: "", label: "Todos" },
   { value: "SALIDA_REGULAR", label: "Salida regular" },
   { value: "SALIDA_ANTICIPADA", label: "Salida anticipada" },
   { value: "NO_MARCADA", label: "No marcada" }
 ];
-
 const SCHOOL_LEVELS = [
   { value: "", label: "Todos" },
   { value: "INICIAL", label: "Inicial" },
   { value: "PRIMARIA", label: "Primaria" },
 ];
-
 const SECTIONS = [
   { value: "", label: "Todas" },
   ...["A", "B", "C", "D", "E", "F"].map(s => ({ value: s, label: s })),
 ];
-
 const GRADES = [
   { value: "", label: "Todos" },
   ...[1, 2, 3, 4, 5, 6].map(n => ({ value: n, label: n })),
@@ -61,18 +58,15 @@ export default function AssistanceFilterFetcher({
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  // Cursos dinámicos
+  const { user, person } = useAuth();
+  const isStudent = useRol(['ESTUDIANTE']);
   const [courses, setCourses] = useState([]);
   useEffect(() => {
     getCourses().then(setCourses).catch(() => setCourses([]));
   }, []);
-
-  // Student autocomplete
+  // Autocomplete student
   const [studentQuery, setStudentQuery] = useState("");
   const [studentResults, setStudentResults] = useState([]);
-
-  // Fetch principal
   const fetchData = async (newFilters = filters) => {
     setLoading(true);
     setError("");
@@ -86,13 +80,7 @@ export default function AssistanceFilterFetcher({
     }
     setLoading(false);
   };
-
-  // Fetch data y autocomplete
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line
-  }, [filters]);
-
+  useEffect(() => { fetchData(); }, [filters]);
   useEffect(() => {
     if (studentQuery.trim() === "") {
       setStudentResults([]);
@@ -109,8 +97,6 @@ export default function AssistanceFilterFetcher({
     }, 400);
     return () => clearTimeout(timeout);
   }, [studentQuery]);
-
-  // Handlers filtros
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
@@ -119,167 +105,293 @@ export default function AssistanceFilterFetcher({
       page: 0,
     }));
   };
-
   const handleClearFilters = () => {
-    setFilters({ ...DEFAULT_FILTERS, size: filters.size || 20 });
-    setStudentResults([]);
-    setStudentQuery("");
+    if (isStudent && person) {
+      setFilters(f => ({
+        ...DEFAULT_FILTERS,
+        studentId: user.studentId || user.id,
+        size: filters.size || 20,
+      }));
+      setStudentQuery(`${person.firstName} ${person.lastName} (${person.dni})`);
+      setStudentResults([]);
+    } else {
+      setFilters({ ...DEFAULT_FILTERS, size: filters.size || 20 });
+      setStudentResults([]);
+      setStudentQuery("");
+    }
   };
-
   const handlePageChange = (newPage) => {
     setFilters((prev) => ({
       ...prev,
       page: newPage,
     }));
   };
+  useEffect(() => {
+    if (isStudent && person) {
+      const fullName = `${person.firstName} ${person.lastName} (${person.dni})`;
+      setStudentQuery(fullName);
+      setFilters(f => ({
+        ...f,
+        studentId: user.studentId || user.id,
+      }));
+      const ul = ulRef.current;
+      if (ul && ul.firstElementChild && ul.firstElementChild.tagName === 'LI') {
+        ul.firstElementChild.click();
+      }
+    }
+  }, [isStudent, person, user]);
+  useEffect(() => {
+    if (isStudent) setStudentResults([]);
+  }, [isStudent]);
+
+  const ulRef = useRef(null);
+
+  useEffect(() => {
+    // Solo ejecuta una vez al montar
+    const ul = ulRef.current;
+    if (ul && ul.firstElementChild && ul.firstElementChild.tagName === 'LI') {
+      ul.firstElementChild.click();
+    }
+  }, isStudent);
+
+  // Dentro del componente, antes del return:
+  const firstLiRef = useRef(null);
+
+  // Dispara el click automático cuando llegan los resultados:
+  useEffect(() => {
+    if (studentResults.length > 0 && firstLiRef.current) {
+      firstLiRef.current.click();
+    }
+  }, [studentResults]);
 
   return (
-    <div>
-      {/* Filtros */}
-      <div className="w-full bg-gradient-to-tr from-blue-50 via-white to-gray-50 border border-blue-100 shadow-2xl rounded-2xl p-6 mb-6 flex flex-wrap gap-4 items-end">
+    <div className="mb-10 adventure-panel">
+      <style>{`
+        .adventure-panel.adventure-filters {
+          border: 7px solid #574d32;
+          border-radius: 28px 28px 30px 30px;
+          box-shadow: 0 0 18px #000a;
+          font-family: 'Pirata One', cursive, monospace;
+          padding: 22px 26px 18px 26px;
+        }
+        .adventure-panel .adventure-filter-label {
+          font-family: 'Pirata One', cursive;
+          color: #6b4f22;
+          font-size: 1.04rem;
+          margin-bottom: 2px;
+        }
+        .adventure-panel .adventure-filter-input,
+        .adventure-panel .adventure-filter-select {
+          font-family: 'Pirata One', cursive;
+          font-size: 1.01rem;
+          border-radius: 12px 18px 10px 16px;
+          padding: 8px 14px;
+          border: 2.2px solid #bca66a;
+          background: #fffbe9;
+          box-shadow: 1px 2px #e2d1aa;
+          outline: none;
+          margin-bottom: 2px;
+          min-width: 80px;
+        }
+        .adventure-panel .adventure-filter-input:focus,
+        .adventure-panel .adventure-filter-select:focus {
+          border-color: #a88c42;
+          background: #fff9cf;
+        }
+        .adventure-panel .adventure-autocomplete {
+          position: relative;
+        }
+        .adventure-panel .adventure-autocomplete-list {
+          position: absolute;
+          left: 0; right: 0; top: 100%;
+          z-index: 100;
+          background: #fffbe8;
+          border: 2px solid #cbb679;
+          border-radius: 11px;
+          box-shadow: 1px 4px 12px #5b462c22;
+          margin-top: 2px;
+          font-size: 1rem;
+          max-height: 180px;
+          overflow-y: auto;
+        }
+        .adventure-panel .adventure-autocomplete-list li {
+          padding: 8px 15px;
+          cursor: pointer;
+        }
+        .adventure-panel .adventure-autocomplete-list li:hover {
+          background: #f6e9b6;
+        }
+        .adventure-panel .adventure-filters-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px 22px;
+          align-items: end;
+        }
+        .adventure-panel .adventure-clear-btn {
+          background: linear-gradient(120deg, #e6e1a2 60%, #bcad65 100%);
+          color: #795c28;
+          border-radius: 9px;
+          border: 2px solid #cfb44b;
+          font-family: 'Pirata One', cursive;
+          padding: 8px 20px;
+          font-size: 1rem;
+          transition: background .12s, color .13s, transform .1s;
+          box-shadow: 1px 2px #dec98a;
+          margin-left: 20px;
+        }
+        .adventure-panel .adventure-clear-btn:active {
+          background: #a39354;
+          color: #fffbe0;
+          transform: scale(.97);
+        }
+      `}</style>
+      <div className="adventure-filters-row mb-6">
         {/* Autocompletado de estudiante */}
-        <div className="relative col-span-2">
-          <label className="text-gray-700 text-sm font-medium mb-1 block">Estudiante</label>
+        <div className="adventure-autocomplete">
+          <label className="adventure-filter-label block">Estudiante</label>
           <input
-            className="w-full px-3 py-2 border border-gray-200 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="adventure-filter-input w-56"
             placeholder="Buscar por nombre o DNI"
             value={studentQuery}
-            onChange={e => {
-              setStudentQuery(e.target.value);
-            }}
+            onChange={e => setStudentQuery(e.target.value)}
             autoComplete="off"
           />
           {studentResults.length > 0 && (
-            <ul className="absolute left-0 right-0 bg-white z-10 rounded-xl shadow border mt-1 max-h-44 overflow-y-auto">
-              {studentResults.map(s => (
+            <ul className="adventure-autocomplete-list">
+              {studentResults.map((s, i) => (
                 <li
                   key={s.id}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-50"
+                  ref={i === 0 ? firstLiRef : null}
                   onClick={() => {
                     setStudentQuery(`${s.fullName} (${s.dni})`);
-                    let e = { target: { name: "", value: undefined } };
-                    e.target.name = "studentId";
-                    e.target.value = s.id;
+                    let e = { target: { name: "studentId", value: s.id } };
                     handleFilterChange(e);
                     setStudentResults([]);
                   }}
                 >
-                  {s.fullName} <span className="text-xs text-gray-400">({s.dni})</span>
+                  {s.fullName} <span style={{ color: "#baa66a" }}>({s.dni})</span>
                 </li>
               ))}
             </ul>
           )}
         </div>
-
         {/* Estado entrada */}
         <div>
-          <label className="text-gray-700 text-sm font-medium mb-1 block">Estado entrada</label>
+          <label className="adventure-filter-label block">Estado entrada</label>
           <select
             name="entryStatus"
             value={filters.entryStatus}
             onChange={handleFilterChange}
-            className="input-filter w-40"
+            className="adventure-filter-select w-40"
           >
             {ENTRY_STATUS.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         </div>
-
         {/* Estado salida */}
         <div>
-          <label className="text-gray-700 text-sm font-medium mb-1 block">Estado salida</label>
+          <label className="adventure-filter-label block">Estado salida</label>
           <select
             name="exitStatus"
             value={filters.exitStatus}
             onChange={handleFilterChange}
-            className="input-filter w-40"
+            className="adventure-filter-select w-40"
           >
             {EXIT_STATUS.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         </div>
-
         {/* Fechas */}
-        <input
-          type="date"
-          name="startDate"
-          value={filters.startDate}
-          onChange={handleFilterChange}
-          className="input-filter w-36"
-        />
-        <input
-          type="date"
-          name="endDate"
-          value={filters.endDate}
-          onChange={handleFilterChange}
-          className="input-filter w-36"
-        />
-
+        <div>
+          <label className="adventure-filter-label block">Desde</label>
+          <input
+            type="date"
+            name="startDate"
+            value={filters.startDate}
+            onChange={handleFilterChange}
+            className="adventure-filter-input w-36"
+          />
+        </div>
+        <div>
+          <label className="adventure-filter-label block">Hasta</label>
+          <input
+            type="date"
+            name="endDate"
+            value={filters.endDate}
+            onChange={handleFilterChange}
+            className="adventure-filter-input w-36"
+          />
+        </div>
         {/* Grado */}
-        <select
-          name="grade"
-          value={filters.grade}
-          onChange={handleFilterChange}
-          className="input-filter w-24"
-        >
-          {GRADES.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-
+        <div>
+          <label className="adventure-filter-label block">Grado</label>
+          <select
+            name="grade"
+            value={filters.grade}
+            onChange={handleFilterChange}
+            className="adventure-filter-select w-24"
+          >
+            {GRADES.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
         {/* Sección */}
-        <select
-          name="section"
-          value={filters.section}
-          onChange={handleFilterChange}
-          className="input-filter w-20"
-        >
-          {SECTIONS.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-
+        <div>
+          <label className="adventure-filter-label block">Sección</label>
+          <select
+            name="section"
+            value={filters.section}
+            onChange={handleFilterChange}
+            className="adventure-filter-select w-20"
+          >
+            {SECTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
         {/* Nivel escolar */}
-        <select
-          name="schoolLevel"
-          value={filters.schoolLevel}
-          onChange={handleFilterChange}
-          className="input-filter w-32"
-        >
-          {SCHOOL_LEVELS.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-
-        {/* Cursos desde API */}
-        <select
-          name="courseId"
-          value={filters.courseId}
-          onChange={handleFilterChange}
-          className="input-filter w-44"
-        >
-          <option value="">Todos los cursos</option>
-          {courses.map(c => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({c.year})
-            </option>
-          ))}
-        </select>
+        <div>
+          <label className="adventure-filter-label block">Nivel</label>
+          <select
+            name="schoolLevel"
+            value={filters.schoolLevel}
+            onChange={handleFilterChange}
+            className="adventure-filter-select w-32"
+          >
+            {SCHOOL_LEVELS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+        {/* Cursos */}
+        <div>
+          <label className="adventure-filter-label block">Curso</label>
+          <select
+            name="courseId"
+            value={filters.courseId}
+            onChange={handleFilterChange}
+            className="adventure-filter-select w-44"
+          >
+            <option value="">Todos los cursos</option>
+            {courses.map(c => (
+              <option key={c.id} value={c.id}>
+                {c.name} ({c.year})
+              </option>
+            ))}
+          </select>
+        </div>
         {/* Más filtros personalizados */}
         {extraFilters && extraFilters({ filters, onChange: handleFilterChange })}
         <button
+          type="button"
           onClick={handleClearFilters}
-          className="ml-auto px-4 py-2 text-sm rounded-xl bg-white hover:bg-gray-100 border border-gray-300 shadow transition"
+          className="adventure-clear-btn"
         >
           Limpiar
         </button>
-        <style>{`
-          .input-filter {
-            @apply px-3 py-2 border border-blue-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition;
-          }
-        `}</style>
       </div>
       {/* Render prop para mostrar tabla/tarjeta como quieras */}
       {children({
