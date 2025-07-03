@@ -230,7 +230,7 @@ export default function StudentQRScanner({ onScan }) {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <div className="qr-camera-frame relative mb-1">
+        <div className="qr-camera-frame relative mb-1 max-w-full">
           <div
             id={regionId}
             className="absolute top-0 left-0 w-full h-full"

@@ -259,107 +259,221 @@ const CourseStudentModal = ({ trigger, courseId }) => {
         </div>
       </div>
       <style>{`
-      .adventure-form {
-        font-family: 'Georgia', serif;
-        height: 70vh;
-      }
-      .adventure-panel {
-        background: #fff9ed;
-        border: 1.7px solid #e6d2a5;
-        border-radius: 15px;
-        padding: 17px 14px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 12px #eddec4aa;
+  .adventure-form {
+    font-family: 'Georgia', serif;
+    height: 70vh;
+    overflow-y: auto;
+  }
+  .adventure-panel {
+    background: #fff9ed;
+    border: 1.7px solid #e6d2a5;
+    border-radius: 15px;
+    padding: 17px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 12px #eddec4aa;
+  }
+  .adventure-label {
+    color: #b89325;
+    font-weight: bold;
+    font-family: 'Georgia', serif;
+    font-size: 1.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .adventure-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+  }
+  .adventure-table th, .adventure-table td {
+    border-bottom: 1.2px dashed #e0c170;
+    padding: 7px 6px;
+    white-space: nowrap;
+    font-size: 1em;
+  }
+  .adventure-table th {
+    background: #f8ecd7;
+    color: #967427;
+    font-weight: bold;
+    font-size: 0.98em;
+  }
+  .adventure-table tbody tr {
+    transition: background .16s;
+  }
+  .adventure-table tbody tr.adventure-row:hover {
+    background: #f8efcb !important;
+  }
+  .adventure-table input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #bb9e52;
+  }
+  .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+    font-family: 'Georgia', serif;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background .16s, color .16s;
+  }
+  .btn-adventure {
+    background: linear-gradient(90deg, #ecd18c 10%, #c6a258 90%);
+    color: #604a14;
+    border: none;
+    padding: 9px 20px;
+    font-size: 1rem;
+    box-shadow: 0 2px 9px #ecd99a44;
+  }
+  .btn-adventure:hover {
+    background: linear-gradient(90deg, #ffe7b4 10%, #b89325 90%);
+    color: #7d640c;
+  }
+  .btn-adventure-secondary {
+    background: #f9f6ed;
+    color: #8c7a4c;
+    border: 1.2px solid #d5be80;
+    padding: 9px 19px;
+    font-size: 1rem;
+  }
+  .btn-adventure-secondary:hover {
+    background: #f0e5c5;
+    color: #b39334;
+  }
+  .btn-adventure-mini {
+    background: #f3e2c0;
+    color: #95702a;
+    border: 1.1px solid #e1c98a;
+    padding: 5px 14px;
+    font-size: 0.96em;
+    margin: 0 2px;
+  }
+  .btn-adventure-mini.active, .btn-adventure-mini:active {
+    background: #c7a96a;
+    color: #fff;
+  }
+  .adventure-list {
+    margin-top: 0.5rem;
+  }
+  .adventure-list li {
+    background: #f9f6ed;
+    border-radius: 8px;
+    margin: 2px 0;
+  }
+  .adventure-note {
+    font-family: 'Georgia', serif;
+    color: #b99329;
+    font-style: italic;
+    background: #fff9ed;
+    border-radius: 8px;
+    padding: 8px 0;
+  }
 
-      }
-      .adventure-label {
-        color: #b89325;
-        font-weight: bold;
-        font-family: 'Georgia', serif;
-        font-size: 1.05em;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .adventure-table th, .adventure-table td {
-        border-bottom: 1.2px dashed #e0c170;
-        padding: 7px 6px;
-      }
-      .adventure-table th {
-        background: #f8ecd7;
-        color: #967427;
-        font-weight: bold;
-        font-size: 0.98em;
-      }
-      .adventure-table tbody tr {
-        transition: background .16s;
-      }
-      .adventure-table tbody tr.adventure-row:hover {
-        background: #f8efcb !important;
-      }
-      .adventure-table input[type="checkbox"] {
-        width: 17px;
-        height: 17px;
-        accent-color: #bb9e52;
-      }
-      .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
-        font-family: 'Georgia', serif;
-        border-radius: 10px;
-        font-weight: bold;
-        transition: background .16s, color .16s;
-      }
-      .btn-adventure {
-        background: linear-gradient(90deg, #ecd18c 10%, #c6a258 90%);
-        color: #604a14;
-        border: none;
-        padding: 9px 20px;
-        font-size: 1rem;
-        box-shadow: 0 2px 9px #ecd99a44;
-      }
-      .btn-adventure:hover {
-        background: linear-gradient(90deg, #ffe7b4 10%, #b89325 90%);
-        color: #7d640c;
-      }
-      .btn-adventure-secondary {
-        background: #f9f6ed;
-        color: #8c7a4c;
-        border: 1.2px solid #d5be80;
-        padding: 9px 19px;
-        font-size: 1rem;
-      }
-      .btn-adventure-secondary:hover {
-        background: #f0e5c5;
-        color: #b39334;
-      }
-      .btn-adventure-mini {
-        background: #f3e2c0;
-        color: #95702a;
-        border: 1.1px solid #e1c98a;
-        padding: 5px 14px;
-        font-size: 0.96em;
-        margin: 0 2px;
-      }
-      .btn-adventure-mini.active, .btn-adventure-mini:active {
-        background: #c7a96a;
-        color: #fff;
-      }
-      .adventure-list {
-        margin-top: 0.5rem;
-      }
-      .adventure-list li {
-        background: #f9f6ed;
-        border-radius: 8px;
-        margin: 2px 0;
-      }
-      .adventure-note {
-        font-family: 'Georgia', serif;
-        color: #b99329;
-        font-style: italic;
-        background: #fff9ed;
-        border-radius: 8px;
-        padding: 8px 0;
-      }
-    `}</style>
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 1024px) {
+    .adventure-form {
+      font-size: 0.97em;
+      height: 70vh;
+    }
+    .adventure-panel {
+      padding: 10px 6px;
+      font-size: 0.98em;
+    }
+    .adventure-label {
+      font-size: 1em;
+    }
+    .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+      font-size: 0.97em;
+      padding: 8px 10px;
+    }
+  }
+  @media (max-width: 720px) {
+    .adventure-form {
+      font-size: 0.95em;
+      height: 65vh;
+      padding: 0 2px;
+    }
+    .adventure-panel {
+      padding: 8px 2px;
+      font-size: 0.97em;
+    }
+    .adventure-label {
+      font-size: 0.97em;
+      gap: 4px;
+    }
+    .adventure-table th, .adventure-table td {
+      padding: 5px 3px;
+      font-size: 0.97em;
+    }
+    .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+      font-size: 0.95em;
+      padding: 7px 8px;
+      border-radius: 8px;
+    }
+  }
+  @media (max-width: 520px) {
+    .adventure-form {
+      font-size: 0.92em;
+      height: 58vh;
+    }
+    .adventure-label {
+      font-size: 0.93em;
+      gap: 2px;
+    }
+    .adventure-panel {
+      padding: 4px 1px;
+      font-size: 0.93em;
+      border-radius: 8px;
+    }
+    .adventure-table th, .adventure-table td {
+      padding: 4px 2px;
+      font-size: 0.92em;
+    }
+    .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+      font-size: 0.93em;
+      padding: 6px 4px;
+      border-radius: 6px;
+    }
+  }
+  /* Tabla scroll horizontal en móvil */
+  @media (max-width: 900px) {
+    .adventure-panel {
+      overflow-x: auto;
+    }
+    .adventure-table {
+      min-width: 480px !important;
+    }
+  }
+  @media (max-width: 600px) {
+    .adventure-panel {
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+    .adventure-table {
+      min-width: 400px !important;
+      font-size: 0.92em;
+    }
+    .adventure-label {
+      font-size: 0.90em;
+    }
+    .btn-adventure, .btn-adventure-secondary, .btn-adventure-mini {
+      font-size: 0.91em;
+      padding: 5px 2px;
+    }
+  }
+  /* react-select ajustado */
+  .adventure-select .css-13cymwt-control,
+  .adventure-select .css-t3ipsp-control {
+    min-height: 34px !important;
+    border-radius: 7px !important;
+    font-size: 0.98em !important;
+  }
+  @media (max-width: 600px) {
+    .adventure-select .css-13cymwt-control,
+    .adventure-select .css-t3ipsp-control {
+      min-height: 28px !important;
+      font-size: 0.93em !important;
+    }
+  }
+`}</style>
     </Modal>
   );
 

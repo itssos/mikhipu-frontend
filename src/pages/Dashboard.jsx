@@ -92,6 +92,12 @@ const Dashboard = () => {
         @media (max-width: 750px) {
           .dash-header { padding: 0 10px; font-size: 1.2rem; }
           .adventure-panel { padding: 20px 6px 16px 8px; }
+          .panel-adventure{
+            border: none !important;
+          }
+          .user-info-block{
+            display: none;
+          }
         }
       `}</style>
       {/* Header */}

@@ -23,7 +23,7 @@ export default function AssistanceStatsDashboard() {
           border: 7px solid #574d32;
           border-radius: 28px 28px 40px 40px;
           box-shadow: 0 0 32px #000b;
-          padding: 36px 26px 28px 26px;
+          padding: 0px;
           font-family: 'Pirata One', cursive, monospace;
           max-width: 1200px;
         }

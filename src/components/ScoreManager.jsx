@@ -949,7 +949,7 @@ export default function ScoreManager() {
       )}
 
       {isAdminOrTeacher && (
-        <section className="adventure-panel adventure-history mb-10">
+        <section className="adventure-panel adventure-history mb-10" style={{padding: 0}}>
           <style>{`
       .adventure-panel.adventure-history {
         background: #f7f1e2 url('https://www.transparenttextures.com/patterns/wood-pattern.png');

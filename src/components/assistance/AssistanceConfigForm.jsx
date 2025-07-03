@@ -132,7 +132,7 @@ export default function AssistanceConfigForm() {
       }
       .asist-grid2 {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 1.1rem;
       }
     `}</style>

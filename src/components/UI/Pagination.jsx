@@ -34,6 +34,7 @@ export default function Pagination({
         fontFamily: "'Pirata One', cursive",
         fontSize: 17,
         userSelect: "none",
+        flexWrap: "wrap", // <-- Para responsive
       }}
     >
       <button
@@ -54,7 +55,7 @@ export default function Pagination({
       >
         &lt;
       </button>
-      <div style={{ display: "flex", gap: 3, margin: "0 7px" }}>
+      <div className="adventure-pages">
         {pages.map((p, i) =>
           p === -1 ? (
             <span key={i} className="note-adventure" style={{ padding: "0 5px" }}>…</span>
@@ -95,23 +96,18 @@ export default function Pagination({
       >
         ⏭
       </button>
-      <span style={{
-        marginLeft: 16,
-        fontSize: 15,
-        color: "#ad9c62",
-        letterSpacing: 1
-      }}>
-        Página <b style={{ color: "#8a7e56" }}>{page + 1}</b> de {totalPages}
+      {/* Los elementos informativos y select van a una fila nueva en móviles */}
+      <span className="pagination-info">
+        Página <b>{page + 1}</b> de {totalPages}
       </span>
       {typeof size !== 'undefined' && typeof onChangeSize === 'function' && (
-        <div style={{ marginLeft: 16, display: "flex", alignItems: "center", gap: 3 }}>
-          <label htmlFor="size-select" style={{ fontSize: 15, color: "#b7a751" }}>Tamaño:</label>
+        <div className="pagination-size">
+          <label htmlFor="size-select">Tamaño:</label>
           <select
             id="size-select"
             className="select-adventure"
             value={size}
             onChange={e => onChangeSize(Number(e.target.value))}
-            style={{ fontSize: 15, minWidth: 60, marginLeft: 5 }}
           >
             {sizeOptions.map(opt => (
               <option key={opt} value={opt}>{opt}</option>
@@ -119,7 +115,18 @@ export default function Pagination({
           </select>
         </div>
       )}
+
+      {/* --- CSS RESPONSIVE --- */}
       <style>{`
+        .adventure-pagination {
+          flex-wrap: wrap;
+          row-gap: 7px;
+        }
+        .adventure-pages {
+          display: flex;
+          gap: 3px;
+          margin: 0 7px;
+        }
         .btn-adventure-pagination {
           background: linear-gradient(120deg, #ead59b 80%, #c3ac69 100%);
           color: #7c6737;
@@ -178,6 +185,95 @@ export default function Pagination({
           color: #ad9c62;
           font-size: 16px;
           font-family: 'Pirata One', cursive;
+        }
+        .pagination-info {
+          margin-left: 16px;
+          font-size: 15px;
+          color: #ad9c62;
+          letter-spacing: 1px;
+          white-space: nowrap;
+        }
+        .pagination-info b {
+          color: #8a7e56;
+        }
+        .pagination-size {
+          margin-left: 16px;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+        .pagination-size label {
+          font-size: 15px;
+          color: #b7a751;
+        }
+
+        /* --- MEDIA QUERIES --- */
+
+        /* Tablets y menos */
+        @media (max-width: 900px) {
+          .adventure-pagination {
+            justify-content: center !important;
+            font-size: 15px;
+            gap: 7px;
+          }
+          .pagination-info,
+          .pagination-size {
+            margin-left: 0 !important;
+          }
+        }
+        /* Teléfonos grandes */
+        @media (max-width: 600px) {
+          .adventure-pagination {
+            font-size: 13.2px;
+            gap: 6px;
+          }
+          .btn-adventure-icon,
+          .btn-adventure-pagination {
+            min-width: 28px !important;
+            padding: 5px 0 !important;
+            font-size: 14.5px !important;
+          }
+          .adventure-pages {
+            gap: 1.5px;
+          }
+          .pagination-info {
+            font-size: 12.5px;
+            margin-top: 5px;
+          }
+          .pagination-size label {
+            font-size: 12px;
+          }
+          .select-adventure {
+            font-size: 12px;
+            min-width: 40px;
+            padding: 3px 5px;
+          }
+        }
+        /* Teléfonos pequeños */
+        @media (max-width: 420px) {
+          .adventure-pagination {
+            font-size: 11.5px;
+            gap: 4px;
+          }
+          .pagination-info, .pagination-size {
+            width: 100%;
+            justify-content: center;
+            margin-top: 4px;
+            margin-left: 0 !important;
+            display: flex;
+          }
+          .pagination-info {
+            margin-bottom: 2px;
+          }
+          .adventure-pages {
+            gap: 0.5px;
+          }
+          .btn-adventure-icon,
+          .btn-adventure-pagination {
+            min-width: 20px !important;
+            padding: 3.5px 0 !important;
+            font-size: 12px !important;
+          }
         }
       `}</style>
     </div>

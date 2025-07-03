@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import useRol from "../hooks/useRol";
 
 // --------- Variables para ajustar posición y tamaño ----------
-const BOOK_SIZE = 170; // Tamaño del libro en px
+const BOOK_SIZE = 100; // Tamaño del libro en px
 const BOOK_BOTTOM = 38; // px desde abajo
-const BOOK_RIGHT = 260;  // px desde la derecha
+const BOOK_RIGHT = 250;  // px desde la derecha
 // Puedes probar cambiando BOOK_BOTTOM, BOOK_RIGHT, BOOK_SIZE para posicionar/mejorar
 
 const bookImageUrl = "/libro-1.png"; // Cambia aquí tu PNG

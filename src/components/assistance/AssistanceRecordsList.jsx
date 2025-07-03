@@ -77,7 +77,7 @@ export default function AssistanceRecordsList() {
       }
       .asist-table {
         border-radius: 16px;
-        overflow: hidden;
+        overflow: scroll;
         box-shadow: 0 2px 14px #e1c89455;
         background: #fdfae9;
         font-family: inherit;
@@ -205,8 +205,8 @@ export default function AssistanceRecordsList() {
         }) => (
           <>
             {/* Tabla */}
-            <div className="overflow-x-auto mb-4 asist-table">
-              <table className="min-w-full">
+            <div className="mb-4 asist-table">
+              <table className="">
                 <thead>
                   <tr>
                     <th>Fecha</th>
@@ -266,29 +266,36 @@ export default function AssistanceRecordsList() {
               </table>
             </div>
 
-            {/* Paginación */}
-            <div className="asist-pagination">
-              <div>
-                <span className="text-base text-yellow-900">
+            <div className="asist-pagination w-full flex flex-col sm:flex-row sm:justify-between items-center gap-2 mt-5 mb-2 px-2">
+              {/* Texto de cantidad */}
+              <div className="w-full sm:w-auto flex justify-center sm:justify-start">
+                <span className="text-sm sm:text-base text-yellow-900 text-center">
                   {totalElements > 0 &&
                     `Mostrando ${filters.page * filters.size + 1}-${Math.min((filters.page + 1) * filters.size, totalElements)} de ${totalElements} registros`
                   }
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              {/* Botones y select */}
+              <div className="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
                 <button
-                  className="asist-edit-btn asist-modal-cancel"
+                  className="asist-edit-btn asist-modal-cancel px-2 sm:px-3 py-1 rounded text-sm sm:text-base"
                   onClick={() => onPageChange(filters.page - 1)}
                   disabled={filters.page === 0}
-                >Anterior</button>
-                <span className="text-base font-bold text-yellow-900">{(filters.page + 1)} / {totalPages || 1}</span>
+                >
+                  Anterior
+                </button>
+                <span className="text-sm sm:text-base font-bold text-yellow-900 px-1">
+                  {(filters.page + 1)} / {totalPages || 1}
+                </span>
                 <button
-                  className="asist-edit-btn"
+                  className="asist-edit-btn px-2 sm:px-3 py-1 rounded text-sm sm:text-base"
                   onClick={() => onPageChange(filters.page + 1)}
                   disabled={filters.page + 1 >= totalPages}
-                >Siguiente</button>
+                >
+                  Siguiente
+                </button>
                 <select
-                  className="asist-size-select"
+                  className="asist-size-select border rounded px-2 py-1 text-sm sm:text-base bg-white ml-2"
                   value={filters.size}
                   onChange={e => onPageChange(0, parseInt(e.target.value))}
                 >
@@ -297,7 +304,27 @@ export default function AssistanceRecordsList() {
                   ))}
                 </select>
               </div>
+              {/* CSS para responsividad si alguna clase custom no responde */}
+              <style>{`
+    @media (max-width: 640px) {
+      .asist-pagination {
+        font-size: 13px;
+        gap: 7px;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      .asist-pagination select,
+      .asist-pagination button {
+        font-size: 13px;
+        min-width: 65px;
+      }
+      .asist-pagination span {
+        font-size: 13px !important;
+      }
+    }
+  `}</style>
             </div>
+
 
             {/* Modal Edición */}
             {editing && (

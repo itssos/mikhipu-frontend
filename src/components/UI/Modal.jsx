@@ -46,7 +46,7 @@ export default function Modal({
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel
             className={clsx(
-              'w-full rounded-lg p-6 space-y-4 relative',
+              'w-full rounded-lg p-3 space-y-4 relative',
               bg ? bg : 'bg-white',
               shadow ? "shadow-xl" : "",
               SIZE_CLASSES[size] || SIZE_CLASSES.md,
